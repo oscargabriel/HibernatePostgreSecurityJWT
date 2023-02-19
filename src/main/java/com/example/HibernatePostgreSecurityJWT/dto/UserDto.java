@@ -32,8 +32,6 @@ public class UserDto {
 
     private String phone;
 
-    private LocalDate birthdate;
-
     private List<String> role;
 
 
@@ -46,7 +44,6 @@ public class UserDto {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
-        this.birthdate = user.getBirthdate();
         this.role = rol;
     }
 
@@ -112,14 +109,6 @@ public class UserDto {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
     }
 
     public List<String> getRole() {

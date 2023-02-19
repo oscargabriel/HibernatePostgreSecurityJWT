@@ -3,6 +3,9 @@ package com.example.HibernatePostgreSecurityJWT.repsitory.hibernate.Impl;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.repsitory.hibernate.RepositoryHibernate;
+import com.example.HibernatePostgreSecurityJWT.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -61,5 +64,13 @@ class RepositoryHibernateImplTest {
         List<User> users = repo.findAllUser();
         users.forEach(System.out::println);
         assertNotEquals(null, users);
+    }
+
+    @Test
+    void inicial(){
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        sessionFactory.close();
+        session.close();
     }
 }

@@ -2,20 +2,22 @@ package com.example.HibernatePostgreSecurityJWT.entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="user_role")
-public class UserRole {
+public class UserRole implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id",
             foreignKey = @ForeignKey(name = "fk_userrole_user"))
     private User userId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "role_id",
             foreignKey = @ForeignKey(name = "fk_userrole_role"))
     private Role roleId;

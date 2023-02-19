@@ -2,12 +2,12 @@ package com.example.HibernatePostgreSecurityJWT.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.io.Serializable;
+
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +34,10 @@ public class User {
     @Column(nullable = true)
     private String phone;
 
-    @Column(nullable = true)
-    private LocalDate birthdate;
-
     public User() {
     }
 
-    public User(String username, String password, String document, String name, String lastName, String email, String phone, LocalDate birthdate) {
+    public User(String username, String password, String document, String name, String lastName, String email, String phone) {
         this.username = username;
         this.password = password;
         this.document = document;
@@ -48,7 +45,6 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.birthdate = birthdate;
     }
 
     public Long getId() {
@@ -115,13 +111,6 @@ public class User {
         this.phone = phone;
     }
 
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
-    }
 
     @Override
     public String toString() {
@@ -134,7 +123,6 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", birthdate=" + birthdate +
                 '}';
     }
 }

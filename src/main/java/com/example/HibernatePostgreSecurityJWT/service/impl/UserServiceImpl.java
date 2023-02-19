@@ -21,12 +21,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     //repositorios
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserRoleRepository userRoleRepository;
+    //@Autowired
+    //private RoleRepository roleRepository;
+    //@Autowired
+    //private UserRepository userRepository;
+    //@Autowired
+    //private UserRoleRepository userRoleRepository;
 
     RepositoryHibernate repositoryHibernate = new RepositoryHibernateImpl();
 
@@ -39,23 +39,23 @@ public class UserServiceImpl implements UserService {
         //encriptar la contraseña
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //guardar el usuario
-        User userAux = userRepository.save(user);
-        System.out.println("Usuario creado: "+userAux);
+        User userAux = repositoryHibernate.saveUser(user);
+
         //busca el rol por defecto para asignarlo
         Role roles = repositoryHibernate.findRoleByNameRol("USER");
-        System.out.println("Rol creado: "+roles);
+
         //crea un UserRole para almacenarlo en la base de datos
         UserRole userRole = new UserRole(userAux,roles);
-        System.out.println("UsuarioRol creado: "+userRole);
-        userRoleRepository.save(userRole);
+        repositoryHibernate.saveUserRole(userRole);
         //genera un auxiliar para hacer un Json para devolver fines demostrativos
         List<String> rolesAux = new ArrayList<>();
         rolesAux.add("USER");
         //generar el usuario con los roles asignados y devolver
         // TODO HERROR DE PERSISTENCIA INVESTIGAR
+        //userAux y roles Aux
         UserDto userDto = new UserDto(userAux,rolesAux);
-        //System.out.println(userDto.getName()+" "+userDto.getRole().size());
-        return userDto;
+        //return userDto;
+        return null;
     }
 
     @Override

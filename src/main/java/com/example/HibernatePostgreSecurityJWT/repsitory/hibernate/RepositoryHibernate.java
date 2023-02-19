@@ -3,6 +3,7 @@ package com.example.HibernatePostgreSecurityJWT.repsitory.hibernate;
 import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
+import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
 
 import java.util.List;
 
@@ -32,4 +33,8 @@ public interface RepositoryHibernate {
     List<String> findRolesByUsername(String username);
 
     List<User> findAllUser();
+
+    User saveUser(User user);
+
+    UserRole saveUserRole(UserRole userRole);
 }

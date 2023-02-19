@@ -15,10 +15,10 @@
 
         <!-- DB schema will be updated if needed -->
         <!--     <property name="hibernate.hbm2ddl.auto">create</property>-->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
         <!--    Para importar múltiples archivos sql utilizamos:-->
-        <!--    <property name="hibernate.hbm2ddl.import_files">import.sql,data.sql</property>-->
-        <!-- entities -->
+        <property name="hibernate.hbm2ddl.import_files">data.sql</property>
+    <!-- entities -->
         <mapping class="com.example.HibernatePostgreSecurityJWT.entities.Role"/>
         <mapping class="com.example.HibernatePostgreSecurityJWT.entities.User"/>
         <mapping class="com.example.HibernatePostgreSecurityJWT.entities.UserRole"/>

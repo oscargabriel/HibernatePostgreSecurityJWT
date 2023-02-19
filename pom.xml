@@ -17,12 +17,12 @@
 		<java.version>19</java.version>
 	</properties>
 	<dependencies>
-		<!-- jpa para la coneccion con base de datos-->
+		<!-- jpa para la coneccion con base de datos
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- hibernate para funciones extra al conectar -->
+		 hibernate para funciones extra al conectar -->
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-core</artifactId>

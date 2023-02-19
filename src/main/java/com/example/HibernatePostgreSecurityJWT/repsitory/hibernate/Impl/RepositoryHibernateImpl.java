@@ -2,8 +2,10 @@ package com.example.HibernatePostgreSecurityJWT.repsitory.hibernate.Impl;
 
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
+import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
 import com.example.HibernatePostgreSecurityJWT.repsitory.hibernate.RepositoryHibernate;
 import com.example.HibernatePostgreSecurityJWT.util.HibernateUtil;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 
@@ -60,5 +62,37 @@ public class RepositoryHibernateImpl implements RepositoryHibernate {
         if(users.size()==0){ return null; }
         session.close();
         return users;
+    }
+
+    @Override
+    public User saveUser(User user) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.beginTransaction();
+            session.save(user);
+            session.getTransaction().commit();
+        }catch (PersistenceException e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+        session.close();
+        return user;
+    }
+
+    @Override
+    public UserRole saveUserRole(UserRole userRole) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.beginTransaction();
+            session.save(userRole);
+            session.getTransaction().commit();
+        }catch (PersistenceException e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+        session.close();
+        return userRole;
     }
 }
