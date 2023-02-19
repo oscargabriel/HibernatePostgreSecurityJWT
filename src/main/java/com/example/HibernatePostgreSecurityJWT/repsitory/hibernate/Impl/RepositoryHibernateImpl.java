@@ -11,11 +11,6 @@ import java.util.List;
 
 public class RepositoryHibernateImpl implements RepositoryHibernate {
 
-    public RepositoryHibernateImpl() {
-    }
-
-
-
     @Override
     public User findUserByUsername(String username) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -27,15 +22,17 @@ public class RepositoryHibernateImpl implements RepositoryHibernate {
         return user;
     }
 
-    @Override
+    @Override//error con al intentar recuperar el rol directamente, se uso object[] y luego cast
     public Role findRoleByNameRol(String name) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        NativeQuery<Role> query = session.createNativeQuery(
-                "SELECT * FROM role r WHERE r.name = :name",Role.class);
+        NativeQuery<Object[]> query = session.createNativeQuery(
+                "SELECT * FROM role r WHERE r.name = :name ",Object[].class);
         query.setParameter("name",name);
-        Role rol = query.getSingleResultOrNull();
+        System.out.println();
+        Object[] o = query.getSingleResultOrNull();
         session.close();
-        return rol;
+        if(o.length==0){return null; }
+        return new Role((Long) o[0], (String) o[2], (String)o[1]);
     }
 
     @Override
@@ -54,5 +51,14 @@ public class RepositoryHibernateImpl implements RepositoryHibernate {
         session.close();
         if(roles.size()==0){ return null; }
         return roles;
+    }
+
+    @Override
+    public List<User> findAllUser() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<User> users = session.createNativeQuery("SELECT * FROM users",User.class).list();
+        if(users.size()==0){ return null; }
+        session.close();
+        return users;
     }
 }

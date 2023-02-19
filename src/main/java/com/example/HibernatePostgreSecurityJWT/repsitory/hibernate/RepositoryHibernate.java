@@ -1,5 +1,6 @@
 package com.example.HibernatePostgreSecurityJWT.repsitory.hibernate;
 
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 
@@ -29,4 +30,6 @@ public interface RepositoryHibernate {
      * @return roles asignados
      */
     List<String> findRolesByUsername(String username);
+
+    List<User> findAllUser();
 }

@@ -20,7 +20,7 @@ public class WebSecurtiryConfig {
         http.csrf().disable().
                 cors().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/hola","/register").permitAll()
+                .requestMatchers("/hola","/register","/findAllUser").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

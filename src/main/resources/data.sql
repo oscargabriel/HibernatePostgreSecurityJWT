@@ -1,0 +1,10 @@
+
+INSERT INTO role (id,description,name) VALUES (1,'User role','USER');
+INSERT INTO role (id,description,name) VALUES (2,'Employee role','EMPLOYEE');
+INSERT INTO role (id,description,name) VALUES (3,'Admin role','ADMIN');
+
+INSERT INTO users (id, username, password, document, name, last_name, email,phone,birthdate)
+VALUES (1,'zaos1','zaos1','987654321','oscar','zambrano','zaos1@gmail.com','+58123456789','14-02-2018');
+
+INSERT INTO user_role (id, role_id, user_id)VALUES (1,1,1);
+INSERT INTO user_role (id, role_id, user_id)VALUES (2,3,1);

@@ -55,4 +55,11 @@ class RepositoryHibernateImplTest {
         List<String> roles = repo.findRolesByUsername("zaos1111111111111");
         assertNull(roles);
     }
+
+    @Test
+    void findAllUser() {
+        List<User> users = repo.findAllUser();
+        users.forEach(System.out::println);
+        assertNotEquals(null, users);
+    }
 }

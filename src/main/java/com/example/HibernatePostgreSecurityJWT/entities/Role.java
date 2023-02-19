@@ -9,13 +9,19 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 30, unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 30, unique = true, nullable = false)
+    @Column(nullable = false)
     private String description;
 
     public Role() {
+    }
+
+    public Role(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public long getId() {

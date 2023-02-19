@@ -2,6 +2,7 @@ package com.example.HibernatePostgreSecurityJWT.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -12,35 +13,34 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 30, unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(length = 30, nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(length = 30, unique = true, nullable = true)
+    @Column(unique = true, nullable = true)
     private String document;
 
-    @Column(length = 30, nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name="last_name", length = 30, nullable = false)
+    @Column(name="last_name", nullable = false)
     private String lastName;
 
-    @Column(length = 50, unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(length = 50, nullable = true)
+    @Column(nullable = true)
     private String phone;
 
-    @Column(length = 50, nullable = true)
-    private Date birthdate;
+    @Column(nullable = true)
+    private LocalDate birthdate;
 
     public User() {
     }
 
-    public User(Long id, String username, String password, String document, String name, String lastName, String email, String phone, Date birthdate) {
-        this.id = id;
+    public User(String username, String password, String document, String name, String lastName, String email, String phone, LocalDate birthdate) {
         this.username = username;
         this.password = password;
         this.document = document;
@@ -115,11 +115,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Date getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 
