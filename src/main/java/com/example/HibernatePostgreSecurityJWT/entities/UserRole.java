@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class UserRole implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
@@ -25,7 +24,8 @@ public class UserRole implements Serializable {
     public UserRole() {
     }
 
-    public UserRole(User userId, Role roleId) {
+    public UserRole(Long id, User userId, Role roleId) {
+        this.id = id;
         this.userId = userId;
         this.roleId = roleId;
     }

@@ -6,6 +6,7 @@ import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonali
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,79 +17,77 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
     @PersistenceContext//definir la variable para las consultas
     private EntityManager entityManager;
 
+    //================================================================================
+    @Override
+    public Long UserID() {
+        Query query = entityManager.createNativeQuery(
+                "SELECT MAX(id) FROM users", Long.class);
+        return ((Long)query.getResultList().get(0)+1L);
+    }
 
+    @Override
+    public Long Role() {
+        Query query = entityManager.createNativeQuery(
+                "SELECT MAX(id) FROM role", Long.class);
+        return ((Long)query.getResultList().get(0)+1L);
+    }
+
+    @Override
+    public Long UserRole() {
+        Query query = entityManager.createNativeQuery(
+                "SELECT MAX(id) FROM user_role", Long.class);
+        return ((Long)query.getResultList().get(0)+1L);
+    }
+    //================================================================================
 
     @Override
     public List<User> findAllUser() {
-        Query query = entityManager.createNativeQuery("SELECT * FROM users", User.class);
+        System.out.println("Repository mostrando todos los usuarios");
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM users", User.class);
         List<User> users = query.getResultList();
-        users.forEach(System.out::println);
+        if (users.size()==0) return null;
+        System.out.println(users);
         return users;
     }
 
 
     @Override
     public User findUserByUsername(String username) {
-        /*Session session = HibernateUtil.getSessionFactory().openSession();
-        NativeQuery<User> query = session.createNativeQuery(
-                "SELECT * FROM users u where u.username = :username",User.class);
+        System.out.println("Repository mostrando un usuario por su username");
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM users u WHERE u.username = :username", User.class);
         query.setParameter("username",username);
-        User user = query.getSingleResultOrNull();
-        session.close();
-        return user;*/
-        return null;
+        List<User> users = query.getResultList();
+        if (users.size()==0) return null;
+        System.out.println(users.get(0));
+        return users.get(0);
     }
 
     @Override
     public Role findRoleByNameRol(String name) {
-        /*Session session = HibernateUtil.getSessionFactory().openSession();
-        NativeQuery<Object[]> query = session.createNativeQuery(
-                "SELECT * FROM role r WHERE r.name = :name ",Object[].class);
+        System.out.println("Repository mostrando un rol por su name");
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM role r WHERE r.name = :name", Role.class);
         query.setParameter("name",name);
-        System.out.println();
-        Object[] o = query.getSingleResultOrNull();
-        session.close();
-        if(o.length==0){return null; }
-        return new Role((Long) o[0], (String) o[2], (String)o[1]);*/
-        return null;
+        List<Role> role = query.getResultList();
+        if (role.size()==0) return null;
+        System.out.println(role.get(0));
+        return role.get(0);
     }
 
     @Override
     public List<String> findRolesByUsername(String username) {
-        /*List<String> roles;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        NativeQuery<String> query = session.createNativeQuery(
+        System.out.println("Repository mostrando los roles de un usuario por su username");
+        Query query = entityManager.createNativeQuery(
                 "SELECT r.name " +
                         "FROM users u " +
                         "JOIN user_role ur ON u.id = ur.user_id " +
                         "JOIN role r ON r.id = ur.role_id " +
                         "WHERE u.username = :username",String.class);
         query.setParameter("username",username);
-
-        roles = query.list();
-        session.close();
-        if(roles.size()==0){ return null; }
-        return roles;*/
-        return null;
+        List<String> roles = query.getResultList();
+        if (roles.size()==0) return null;
+        return roles;
     }
-
-
-
-    @Override
-    public User saveUser(User user) {
-     /*   Session session = HibernateUtil.getSessionFactory().openSession();
-
-        try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-        }catch (PersistenceException e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-        }
-        session.close();
-        return user;*/
-        return null;
-    }
-
 }

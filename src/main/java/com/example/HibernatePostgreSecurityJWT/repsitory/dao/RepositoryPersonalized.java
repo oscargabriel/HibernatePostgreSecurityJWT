@@ -7,6 +7,11 @@ import java.util.List;
 
 public interface RepositoryPersonalized {
 
+    //generationtype.identity no devuelve el siguiente id, se realizao de forma manual
+    Long UserID();
+    Long Role();
+    Long UserRole();
+
     /**
      * recuperar un usuario apartir del username
      *
@@ -31,8 +36,4 @@ public interface RepositoryPersonalized {
     List<String> findRolesByUsername(String username);
 
     List<User> findAllUser();
-
-    User saveUser(User user);
-
-    //UserRole saveUserRole(UserRole userRole);
 }

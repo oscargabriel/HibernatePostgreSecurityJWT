@@ -43,21 +43,23 @@ public class UserServiceImpl implements UserService {
         //encriptar la contraseña
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //guardar el usuario
+        user.setId(repositoryPersonalized.UserID());
         User userAux = userRepository.save(user);
-
+        System.out.println("guardo el usuario "+ userAux);
         //busca el rol por defecto para asignarlo
 
         Role roles = repositoryPersonalized.findRoleByNameRol("USER");
-
+        System.out.println("genero el rol "+roles);
         //crea un UserRole para almacenarlo en la base de datos
-        UserRole userRole = new UserRole(userAux,roles);
-        //UserRole us = userRoleRepository.save(userRole);
-
-        //genera un auxiliar para hacer un Json para devolver fines demostrativos
+        UserRole userRole = new UserRole(null,userAux,roles);
+        //userRole.setId(repositoryPersonalized.generarID("user_role"));
+        userRole.setId(repositoryPersonalized.UserRole());
+        UserRole us = userRoleRepository.save(userRole);
+        System.out.println("Guardo el UserRole "+us);
+        //genera un auxiliar para hacer un Json para devolver
         List<String> rolesAux = new ArrayList<>();
         rolesAux.add("USER");
         //generar el usuario con los roles asignados y devolver
-        // TODO
 
         //  HERROR DE PERSISTENCIA INVESTIGAR
         //userAux y roles Aux

@@ -30,12 +30,14 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @Override
     @GetMapping("/hola")
     public ResponseEntity<String> hola(){
+        System.out.println("saludo");
         return ResponseEntity.ok("hola");
     }
 
     @Override
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody User user){
+        System.out.println("Guardando");
         // TODO: gestionar cuando sea positiva y excepcion
         return ResponseEntity.ok().body(userService.save(user));
 
@@ -44,14 +46,8 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @Override
     @GetMapping("/findAllUser")
     public ResponseEntity<List<User>> findAllUser() {
-        try {
-            List<User> users = userService.findAllUser();
-            return ResponseEntity.ok().body(users);
-        }catch (Exception e){
-            System.out.println(e.getMessage() +" | "+ e.getCause());
-        }
-        return ResponseEntity.badRequest().build();
-
-
+        System.out.println("mostrando todos los usuarios");
+        List<User> users = userService.findAllUser();
+        return ResponseEntity.ok().body(users);
     }
 }
