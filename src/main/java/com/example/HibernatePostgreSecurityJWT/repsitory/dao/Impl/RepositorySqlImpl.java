@@ -1,32 +1,47 @@
-package com.example.HibernatePostgreSecurityJWT.repsitory.hibernate.Impl;
+package com.example.HibernatePostgreSecurityJWT.repsitory.dao.Impl;
 
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
-import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
-import com.example.HibernatePostgreSecurityJWT.repsitory.hibernate.RepositoryHibernate;
-import com.example.HibernatePostgreSecurityJWT.util.HibernateUtil;
-import jakarta.persistence.PersistenceException;
-import org.hibernate.Session;
-import org.hibernate.query.NativeQuery;
+import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public class RepositoryHibernateImpl implements RepositoryHibernate {
+@Repository
+public class RepositorySqlImpl implements RepositoryPersonalized {
+
+    @PersistenceContext//definir la variable para las consultas
+    private EntityManager entityManager;
+
+
+
+    @Override
+    public List<User> findAllUser() {
+        Query query = entityManager.createNativeQuery("SELECT * FROM users", User.class);
+        List<User> users = query.getResultList();
+        users.forEach(System.out::println);
+        return users;
+    }
+
 
     @Override
     public User findUserByUsername(String username) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        /*Session session = HibernateUtil.getSessionFactory().openSession();
         NativeQuery<User> query = session.createNativeQuery(
                 "SELECT * FROM users u where u.username = :username",User.class);
         query.setParameter("username",username);
         User user = query.getSingleResultOrNull();
         session.close();
-        return user;
+        return user;*/
+        return null;
     }
 
-    @Override//error con al intentar recuperar el rol directamente, se uso object[] y luego cast
+    @Override
     public Role findRoleByNameRol(String name) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        /*Session session = HibernateUtil.getSessionFactory().openSession();
         NativeQuery<Object[]> query = session.createNativeQuery(
                 "SELECT * FROM role r WHERE r.name = :name ",Object[].class);
         query.setParameter("name",name);
@@ -34,12 +49,13 @@ public class RepositoryHibernateImpl implements RepositoryHibernate {
         Object[] o = query.getSingleResultOrNull();
         session.close();
         if(o.length==0){return null; }
-        return new Role((Long) o[0], (String) o[2], (String)o[1]);
+        return new Role((Long) o[0], (String) o[2], (String)o[1]);*/
+        return null;
     }
 
     @Override
     public List<String> findRolesByUsername(String username) {
-        List<String> roles;
+        /*List<String> roles;
         Session session = HibernateUtil.getSessionFactory().openSession();
         NativeQuery<String> query = session.createNativeQuery(
                 "SELECT r.name " +
@@ -52,21 +68,15 @@ public class RepositoryHibernateImpl implements RepositoryHibernate {
         roles = query.list();
         session.close();
         if(roles.size()==0){ return null; }
-        return roles;
+        return roles;*/
+        return null;
     }
 
-    @Override
-    public List<User> findAllUser() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<User> users = session.createNativeQuery("SELECT * FROM users",User.class).list();
-        if(users.size()==0){ return null; }
-        session.close();
-        return users;
-    }
+
 
     @Override
     public User saveUser(User user) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+     /*   Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
             session.beginTransaction();
@@ -77,22 +87,8 @@ public class RepositoryHibernateImpl implements RepositoryHibernate {
             session.getTransaction().rollback();
         }
         session.close();
-        return user;
+        return user;*/
+        return null;
     }
 
-    @Override
-    public UserRole saveUserRole(UserRole userRole) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        try {
-            session.beginTransaction();
-            session.save(userRole);
-            session.getTransaction().commit();
-        }catch (PersistenceException e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-        }
-        session.close();
-        return userRole;
-    }
 }

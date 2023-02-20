@@ -1,13 +1,11 @@
-package com.example.HibernatePostgreSecurityJWT.repsitory.hibernate;
+package com.example.HibernatePostgreSecurityJWT.repsitory.dao;
 
-import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
-import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
 
 import java.util.List;
 
-public interface RepositoryHibernate {
+public interface RepositoryPersonalized {
 
     /**
      * recuperar un usuario apartir del username
@@ -36,5 +34,5 @@ public interface RepositoryHibernate {
 
     User saveUser(User user);
 
-    UserRole saveUserRole(UserRole userRole);
+    //UserRole saveUserRole(UserRole userRole);
 }

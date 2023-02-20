@@ -1,6 +1,7 @@
 package com.example.HibernatePostgreSecurityJWT.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 
@@ -19,7 +20,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = true)
+    @Column(nullable = true)
     private String document;
 
     @Column(nullable = false)
@@ -28,7 +29,7 @@ public class User implements Serializable {
     @Column(name="last_name", nullable = false)
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = true)
@@ -37,7 +38,8 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String username, String password, String document, String name, String lastName, String email, String phone) {
+    public User(Long id, String username, String password, String document, String name, String lastName, String email, String phone) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.document = document;

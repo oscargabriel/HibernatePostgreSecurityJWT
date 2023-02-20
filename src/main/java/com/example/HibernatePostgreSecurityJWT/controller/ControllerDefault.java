@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ControllerDefault {
 
+
     public ResponseEntity<String> hola();
 
     public ResponseEntity<UserDto> register(@RequestBody User user);
