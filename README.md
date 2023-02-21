@@ -16,6 +16,6 @@ paquete jwt se gestionan los token una vez que se inicia session
 
 paquete entities estan las entidades que son reflejo de la base de datos
 
-paquete dto son clases con estructura personalizada para usar en por controller y repository
+paquete dto son clases con estructura personalizada para usar en por controller, repository y service
 
 

@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY) no genera, se uso funcion personalizada
     private Long id;
 
     @Column(unique = true, nullable = false)

@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class UserRole implements Serializable {
 
     @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY) no genera, se uso funcion personalizada
     private Long id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)

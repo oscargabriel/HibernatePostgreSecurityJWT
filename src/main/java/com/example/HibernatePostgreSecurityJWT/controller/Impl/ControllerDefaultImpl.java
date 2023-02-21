@@ -1,30 +1,40 @@
 package com.example.HibernatePostgreSecurityJWT.controller.Impl;
 
 import com.example.HibernatePostgreSecurityJWT.controller.ControllerDefault;
-import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
+import com.example.HibernatePostgreSecurityJWT.dto.controller.LoginUser;
+import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
+import com.example.HibernatePostgreSecurityJWT.dto.service.AuthToken;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
-import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
+import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class ControllerDefaultImpl implements ControllerDefault {
 
 
-
+    @Autowired
     private final UserService userService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    private RepositoryPersonalized repositoryPersonalized;
+    private final TokenProvider jwtTokenUtil;
 
-    public ControllerDefaultImpl(UserService userService) {
+    public ControllerDefaultImpl(AuthenticationManager authenticationManager,
+                                 UserService userService,
+                                 TokenProvider jwtTokenUtil) {
+        this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
@@ -32,6 +42,13 @@ public class ControllerDefaultImpl implements ControllerDefault {
     public ResponseEntity<String> hola(){
         System.out.println("saludo");
         return ResponseEntity.ok("hola");
+    }
+
+    @Override
+    @GetMapping("/hola_authenticate")
+    public ResponseEntity<String> holaauthenticate() {
+        System.out.println("authenticate");
+        return ResponseEntity.ok("hola authenticate");
     }
 
     @Override
@@ -49,5 +66,20 @@ public class ControllerDefaultImpl implements ControllerDefault {
         System.out.println("mostrando todos los usuarios");
         List<User> users = userService.findAllUser();
         return ResponseEntity.ok().body(users);
+    }
+
+    @Override
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser){
+        System.out.println("authenticando");
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginUser.getUsername(),
+                        loginUser.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = jwtTokenUtil.generateToken(authentication);
+        return ResponseEntity.ok(new AuthToken(token));
     }
 }
