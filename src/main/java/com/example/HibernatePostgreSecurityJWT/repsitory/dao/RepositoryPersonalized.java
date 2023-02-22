@@ -12,8 +12,8 @@ public interface RepositoryPersonalized {
 
     //generationtype.identity no devuelve el siguiente id, se realizao de forma manual
     Long UserID();
-    Long Role();
-    Long UserRole();
+    Long RoleID();
+    Long UserRoleID();
 
     /**
      * recuperar un usuario apartir del username

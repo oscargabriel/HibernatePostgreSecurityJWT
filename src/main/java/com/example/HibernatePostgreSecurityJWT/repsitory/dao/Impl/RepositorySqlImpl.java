@@ -28,13 +28,13 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
         return ((Long)query.getResultList().get(0)+1L);
     }
     @Override
-    public Long Role() {
+    public Long RoleID() {
         Query query = entityManager.createNativeQuery(
                 "SELECT MAX(id) FROM role", Long.class);
         return ((Long)query.getResultList().get(0)+1L);
     }
     @Override
-    public Long UserRole() {
+    public Long UserRoleID() {
         Query query = entityManager.createNativeQuery(
                 "SELECT MAX(id) FROM user_role", Long.class);
         return ((Long)query.getResultList().get(0)+1L);

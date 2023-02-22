@@ -83,7 +83,7 @@ public class ControllerDefaultImpl implements ControllerDefault {
     public ResponseEntity<UserDto> register(@RequestBody User user){
         System.out.println("Guardando");
         // TODO: gestionar cuando sea positiva y excepcion
-        return ResponseEntity.ok().body(userServicea.save(user));
+        return ResponseEntity.ok().body(userServicea.saveUser(user));
 
     }
 

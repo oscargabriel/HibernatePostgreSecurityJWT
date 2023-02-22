@@ -84,37 +84,39 @@ public class UserServiceaImpl implements UserDetailsService, UserServicea {
         return authorities;
     }
 
-    /**
-     * guarda el usuario
-     * @param user recibe los datos del usuario para su verifiacion y almacenar
-     * @return regresa los datos del usuario
-     */
-    @Override
-    public UserDto save(User user) {
-// TODO verificar el user, documento, email: que sean unicos antes de almacenar, si no devolver una expecion
 
+    @Override
+    public UserDto saveUser(User user) {
+// TODO verificar el user, documento, email: que sean unicos antes de almacenar, si no devolver una expecion
         //encriptar la contraseña
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //guardar el usuario
         user.setId(repositoryPersonalized.UserID());
         User userAux = userRepository.save(user);
         //busca el rol por defecto para asignarlo
-        Role roles = repositoryPersonalized.findRoleByNameRol("USER");
+        Role role = findRoleByrol("USER");
+        return saveRoleByUser(userAux, role);
+    }
+
+    @Override
+    public UserDto saveRoleByUser(User user, Role role) {
         //crea un UserRole para almacenarlo en la base de datos
-        UserRole userRole = new UserRole(null,userAux,roles);
-        userRole.setId(repositoryPersonalized.UserRole());
+        UserRole userRole = new UserRole(null,user,role);
+        userRole.setId(repositoryPersonalized.UserRoleID());
         UserRole us = userRoleRepository.save(userRole);
         //genera un auxiliar para hacer un Json para devolver
         List<String> rolesAux = new ArrayList<>();
         rolesAux.add("USER");
         //generar el usuario con los roles asignados y devolver
-        return new UserDto(userAux,rolesAux);
+        return new UserDto(user,rolesAux);
     }
 
-    /**
-     * muestra los usuarios almacenados en la base de datos
-     * @return
-     */
+    @Override
+    public Role findRoleByrol(String role){
+        return  repositoryPersonalized.findRoleByNameRol(role);
+    }
+
+
     @Override
     public List<User> findAllUser() {
         List<User> users = repositoryPersonalized.findAllUser();
