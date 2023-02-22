@@ -1,21 +1,33 @@
 usando Spring Boot 3.0.2
 
-paquete controller se encarga de recibir las solicitudes http y llama a service
+paquete CONTROLLER se encarga de recibir las solicitudes http y llama a service
 
-paquete service se encarga de procesar las solicitudes llamando a repository y jwt de security
+paquete DTO son clases con estructura personalizada para ser usada en controller, repository y service
 
-paquete repository hace la conceccion con la base de datos y ejecuta CRUD
+paquete ENTITIES estan las entidades que son reflejo de la base de datos
 
-paquete security se gestiona la seguridad
+paquete REPOSITORY hace la conceccion con la base de datos y ejecuta CRUD
 
-paquete config se establecen las reglas de coneccion, acceso a pagina y caveceras
+  paquete DAO son funciones para llamadas REQUEST personalizadas a la base de datos
 
-paquete component se hacen los mensajes personalizados para las exepciones
+  paquete JPA usa las funciones predefinidas por jpa para los llamdos CREATE, UPDATE, DELETE
 
-paquete jwt se gestionan los token una vez que se inicia session
+paquete SECURITY se gestiona la seguridad del programa administradas por los paquetes
 
-paquete entities estan las entidades que son reflejo de la base de datos
+  paquete COMPONENT se hacen los mensajes personalizados para las exepciones
 
-paquete dto son clases con estructura personalizada para usar en por controller, repository y service
+  paquete CONFIG se establecen las reglas de coneccion, acceso a pagina y caveceras
+
+  paquete JWT se gestionan los token una vez que se inicia session
+
+paquete SERVICE se encarga de gestionar las llamando la base de datos para consultas y authorizaciones
+
+
+
+
+
+
+
+
 
 

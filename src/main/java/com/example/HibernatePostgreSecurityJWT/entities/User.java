@@ -5,7 +5,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 
-
+/**
+ * entidad usuario
+ */
 @Entity
 @Table(name = "users")
 public class User implements Serializable {

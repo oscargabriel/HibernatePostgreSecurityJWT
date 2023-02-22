@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * implementacion de las funcones mediante llamdas sql
+ */
 @Repository
 public class RepositorySqlImpl implements RepositoryPersonalized {
 
@@ -24,14 +27,12 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
                 "SELECT MAX(id) FROM users", Long.class);
         return ((Long)query.getResultList().get(0)+1L);
     }
-
     @Override
     public Long Role() {
         Query query = entityManager.createNativeQuery(
                 "SELECT MAX(id) FROM role", Long.class);
         return ((Long)query.getResultList().get(0)+1L);
     }
-
     @Override
     public Long UserRole() {
         Query query = entityManager.createNativeQuery(
@@ -42,52 +43,61 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
 
     @Override
     public List<User> findAllUser() {
-        System.out.println("Repository mostrando todos los usuarios");
         Query query = entityManager.createNativeQuery(
                 "SELECT * FROM users", User.class);
         List<User> users = query.getResultList();
+        //si no encuentra nada devuelve un null
         if (users.size()==0) return null;
-        System.out.println(users);
+        //devuelve la lista de usuarios
         return users;
     }
 
-
     @Override
     public User findUserByUsername(String username) {
-        System.out.println("Repository mostrando un usuario por su username");
+        //consulta query
         Query query = entityManager.createNativeQuery(
                 "SELECT * FROM users u WHERE u.username = :username", User.class);
+        //indica el parametro
         query.setParameter("username",username);
+        //genera una lista resultante
         List<User> users = query.getResultList();
+        //si no encuentra nada devuelve un null
         if (users.size()==0) return null;
-        System.out.println(users.get(0));
+        //devuelve solo el primer valor
         return users.get(0);
     }
 
     @Override
     public Role findRoleByNameRol(String name) {
-        System.out.println("Repository mostrando un rol por su name");
+        //consulta sql
         Query query = entityManager.createNativeQuery(
                 "SELECT * FROM role r WHERE r.name = :name", Role.class);
+        //indica cual es la condicion
         query.setParameter("name",name);
+        //genera la lista
         List<Role> role = query.getResultList();
+        //valida que no este vacia
         if (role.size()==0) return null;
-        System.out.println(role.get(0));
+        //devuelve el primer valor
         return role.get(0);
     }
 
     @Override
     public List<String> findRolesByUsername(String username) {
-        System.out.println("Repository mostrando los roles de un usuario por su username");
+        //consulta sql
         Query query = entityManager.createNativeQuery(
                 "SELECT r.name " +
                         "FROM users u " +
                         "JOIN user_role ur ON u.id = ur.user_id " +
                         "JOIN role r ON r.id = ur.role_id " +
                         "WHERE u.username = :username",String.class);
+        //valida la condicion
         query.setParameter("username",username);
+        //genera una lista
         List<String> roles = query.getResultList();
+        //verifica que no este vacia
         if (roles.size()==0) return null;
+        //devuelve la lista
         return roles;
     }
 }

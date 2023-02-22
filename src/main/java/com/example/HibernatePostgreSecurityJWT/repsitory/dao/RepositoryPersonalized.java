@@ -5,6 +5,9 @@ import com.example.HibernatePostgreSecurityJWT.entities.User;
 
 import java.util.List;
 
+/**
+ * llamada personalizada a la base de datos para realizar consultas
+ */
 public interface RepositoryPersonalized {
 
     //generationtype.identity no devuelve el siguiente id, se realizao de forma manual
@@ -14,7 +17,6 @@ public interface RepositoryPersonalized {
 
     /**
      * recuperar un usuario apartir del username
-     *
      * @param username que se va a buscar
      * @return el usuario
      */
@@ -22,7 +24,6 @@ public interface RepositoryPersonalized {
 
     /**
      * recuperar un rol apartir del nombre
-     *
      * @param name nombre del rol
      * @return el rol
      */
@@ -35,5 +36,9 @@ public interface RepositoryPersonalized {
      */
     List<String> findRolesByUsername(String username);
 
+    /**
+     * devuelve tosos los usuarios de la base de datos
+     * @return
+     */
     List<User> findAllUser();
 }

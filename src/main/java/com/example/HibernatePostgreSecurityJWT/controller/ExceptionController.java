@@ -11,6 +11,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
+
+/**
+ * gestionar las expeciones que se envian en respuesta
+ */
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
 

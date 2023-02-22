@@ -1,5 +1,8 @@
-package com.example.HibernatePostgreSecurityJWT.dto.service;
+package com.example.HibernatePostgreSecurityJWT.dto.controller;
 
+/**
+ * usado por controller para almacenar el token
+ */
 public class AuthToken {
 
     private String token;

@@ -12,7 +12,7 @@ import java.util.List;
 
 
 /**
- *
+ * usado por repository para la devolucion al momento de registar usuario
  */
 public class UserDto {
 

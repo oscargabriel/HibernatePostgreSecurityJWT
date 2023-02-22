@@ -1,5 +1,8 @@
 package com.example.HibernatePostgreSecurityJWT.dto.controller;
 
+/**
+ * usado por controller para los datos que se reciben para la autenticacion
+ */
 public class LoginUser {
 
     private String username;

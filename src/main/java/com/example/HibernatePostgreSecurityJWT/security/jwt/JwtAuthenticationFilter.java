@@ -18,22 +18,44 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ *
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    /**
+     * verifiaca que el string personalizado para el token sea correcto
+     */
     @Value("${jwt.header.string}")
     public String HEADER_STRING;
 
+    /**
+     * prefijo para la cabecera
+     */
     @Value("${jwt.token.prefix}")
     public String TOKEN_PREFIX;
 
+    /**
+     * llama al metodo para verificar la authenticacion
+     */
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
 
+    /**
+     * llama a la calse que genero el token
+     */
     @Autowired
     private TokenProvider jwtTokenUtil;
 
 
-
+    /**
+     * filtra el token y devuelve expeciones segun sea el caso
+     * @param req
+     * @param res
+     * @param chain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
@@ -41,29 +63,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = req.getHeader(HEADER_STRING);
         String username = null;
         String authToken = null;
+        //verifica que la cabecerao este vacial
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
+
             authToken = header.replace(TOKEN_PREFIX,"");
+            //obtiene el username y devuelve diferentes expecciones dado el caso
             try {
                 username = jwtTokenUtil.getUserNameFromToken(authToken);
             } catch (IllegalArgumentException e) {
-                logger.error("An error occurred while fetching Username from Token", e);
+                logger.error("Error: El obtener el nombre de usuario del token", e);
             } catch (ExpiredJwtException e) {
-                logger.warn("The token has expired", e);
+                logger.warn("Error: El token a expirado", e);
             } catch(SignatureException e){
-                logger.error("Authentication Failed. Username or Password not valid.");
+                logger.error("Error: El usuario o la contraseña no son validos");
             }
+
         } else {
-            logger.warn("Couldn't find bearer string, header will be ignored");
+            logger.warn("No se pudo encontrar la cadena portadora, se ignorará el encabezado");
         }
+        //si el usuario no es nulo y no hay contexto de authenticacion
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+            //establece el contexto de seguridad
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = jwtTokenUtil.getAuthenticationToken(authToken, SecurityContextHolder.getContext().getAuthentication(), userDetails);
+
+                UsernamePasswordAuthenticationToken authentication = jwtTokenUtil.getAuthenticationToken(
+                        authToken, SecurityContextHolder.getContext().getAuthentication(), userDetails);
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                logger.info("authenticated user " + username + ", setting security context");
-                System.err.println("----------------------------------------------------------<<<<<<<<<<");
+
+                logger.info("Usuario autenticado " + username + ", establecer el contexto de seguridad");
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

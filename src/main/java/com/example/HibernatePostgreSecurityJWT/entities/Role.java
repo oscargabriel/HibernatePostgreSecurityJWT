@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+/**
+ * entidad para guardar los roles que pude tener un usuario
+ */
 @Entity
 public class Role implements Serializable {
 

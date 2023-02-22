@@ -1,7 +1,5 @@
 package com.example.HibernatePostgreSecurityJWT.service.impl;
 
-import com.example.HibernatePostgreSecurityJWT.dto.service.AuthToken;
-import com.example.HibernatePostgreSecurityJWT.dto.controller.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
@@ -10,14 +8,9 @@ import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
-import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
-import com.example.HibernatePostgreSecurityJWT.service.UserService;
+import com.example.HibernatePostgreSecurityJWT.service.UserServicea;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,14 +23,9 @@ import java.util.List;
 import java.util.Set;
 
 @Service(value = "userService")
-public class UserServiceImpl implements UserDetailsService, UserService {
-
-    /*@Autowired
-    private AuthenticationManager authenticationManager;*/
+public class UserServiceaImpl implements UserDetailsService, UserServicea {
 
     @Autowired
-    private TokenProvider jwtTokenUtil;
-
     RepositoryPersonalized repositoryPersonalized;
     @Autowired
     RoleRepository roleRepository;
@@ -46,46 +34,61 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     UserRoleRepository userRoleRepository;
 
-    private final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder bcryptEncoder;
 
-
-    public UserServiceImpl(RepositoryPersonalized repositoryPersonalized,
-                           RoleRepository roleRepository,
-                           UserRepository userRepository,
-                           UserRoleRepository userRoleRepository,
-                           TokenProvider jwtTokenUtil//,
-                           //AuthenticationManager authenticationManager
-    ) {
-        //this.authenticationManager = authenticationManager;
+    public UserServiceaImpl(RepositoryPersonalized repositoryPersonalized,
+                            RoleRepository roleRepository,
+                            UserRepository userRepository,
+                            UserRoleRepository userRoleRepository,
+                            BCryptPasswordEncoder bcryptEncoder) {
         this.repositoryPersonalized = repositoryPersonalized;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.bcryptEncoder = bcryptEncoder;
     }
 
+    /**
+     * implementada desde UserDetailService para verificar que el usuario y la clave sean validas
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //verifica que el username exista si no devuelve una expecion
         User user = repositoryPersonalized.findUserByUsername(username);
         if(user == null){
             throw new UsernameNotFoundException("Usuario o Clave Invalida");
         }
-        System.err.println("authorizando usuario");
+        //devueelve el usuario y las autorizaciones que tiene el usuario
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),user.getPassword(),getAuthority(user));
     }
 
+    /**
+     * se encarga de buscar las authorizaciones que tenga el usuario para la funcion previa
+     * @param user
+     * @return
+     */
     private Set<SimpleGrantedAuthority> getAuthority(User user){
+        //crea una variable para almacenar las authorizaciones
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        //crea una lista de las authorizaciones
         List<String> roles = repositoryPersonalized.findRolesByUsername(user.getUsername());
-        roles.forEach(x-> System.err.println(x));
+        //los asigna y retorna
         roles.forEach( rol -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+rol));
         });
-        System.err.println(authorities.toString());
         return authorities;
     }
 
+    /**
+     * guarda el usuario
+     * @param user recibe los datos del usuario para su verifiacion y almacenar
+     * @return regresa los datos del usuario
+     */
     @Override
     public UserDto save(User user) {
 // TODO verificar el user, documento, email: que sean unicos antes de almacenar, si no devolver una expecion
@@ -95,40 +98,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         //guardar el usuario
         user.setId(repositoryPersonalized.UserID());
         User userAux = userRepository.save(user);
-        System.out.println("guardo el usuario "+ userAux);
         //busca el rol por defecto para asignarlo
-
         Role roles = repositoryPersonalized.findRoleByNameRol("USER");
-        System.out.println("genero el rol "+roles);
         //crea un UserRole para almacenarlo en la base de datos
         UserRole userRole = new UserRole(null,userAux,roles);
-        //userRole.setId(repositoryPersonalized.generarID("user_role"));
         userRole.setId(repositoryPersonalized.UserRole());
         UserRole us = userRoleRepository.save(userRole);
-        System.out.println("Guardo el UserRole "+us);
         //genera un auxiliar para hacer un Json para devolver
         List<String> rolesAux = new ArrayList<>();
         rolesAux.add("USER");
         //generar el usuario con los roles asignados y devolver
-        UserDto userDto = new UserDto(userAux,rolesAux);
-        return userDto;
+        return new UserDto(userAux,rolesAux);
     }
 
-    @Override
-    public AuthToken authenticate(LoginUser loginUser) {
-        System.out.println(loginUser.getUsername());
-        System.out.println(loginUser.getPassword());
-
-        /*SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);*/
-        return new AuthToken("token");
-    }
-
+    /**
+     * muestra los usuarios almacenados en la base de datos
+     * @return
+     */
     @Override
     public List<User> findAllUser() {
         List<User> users = repositoryPersonalized.findAllUser();
         return users;
     }
-
-
 }

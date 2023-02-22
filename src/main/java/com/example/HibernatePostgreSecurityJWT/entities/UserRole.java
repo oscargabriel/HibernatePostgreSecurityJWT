@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+/**
+ * entidad para eliminar el llamado muchos a muchos entre user y role
+ */
 @Entity
 @Table(name="user_role")
 public class UserRole implements Serializable {
