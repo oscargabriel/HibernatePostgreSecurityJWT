@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user == null){
             throw new UsernameNotFoundException("Usuario o Clave Invalida");
         }
-
+        System.err.println("authorizando usuario");
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),user.getPassword(),getAuthority(user));
     }
@@ -78,9 +78,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private Set<SimpleGrantedAuthority> getAuthority(User user){
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         List<String> roles = repositoryPersonalized.findRolesByUsername(user.getUsername());
+        roles.forEach(x-> System.err.println(x));
         roles.forEach( rol -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_"+rol));
         });
+        System.err.println(authorities.toString());
         return authorities;
     }
 

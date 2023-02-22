@@ -9,6 +9,7 @@ import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,6 +50,28 @@ public class ControllerDefaultImpl implements ControllerDefault {
     public ResponseEntity<String> holaauthenticate() {
         System.out.println("authenticate");
         return ResponseEntity.ok("hola authenticate");
+    }
+
+
+    @Override
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/hello_user")
+    public ResponseEntity<String> userPing() {
+        return ResponseEntity.ok("hola USER");
+    }
+
+
+    @Override
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/hello_employee")
+    public ResponseEntity<String> employeePing() {
+        return ResponseEntity.ok("hola EMPLOYEE");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/hello_admin")
+    public ResponseEntity<String> adminPing(){
+        return ResponseEntity.ok("hola ADMIN");
     }
 
     @Override

@@ -21,4 +21,8 @@ public interface ControllerDefault {
 
     public ResponseEntity<?> generateToken(LoginUser loginUser);
 
+    public ResponseEntity<String> userPing();
+    public ResponseEntity<String> employeePing();
+    public ResponseEntity<String> adminPing();
+
     }
