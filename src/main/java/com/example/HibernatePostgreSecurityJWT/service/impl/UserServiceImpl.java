@@ -8,8 +8,7 @@ import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
-import com.example.HibernatePostgreSecurityJWT.service.UserServicea;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.HibernatePostgreSecurityJWT.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,25 +22,24 @@ import java.util.List;
 import java.util.Set;
 
 @Service(value = "userService")
-public class UserServiceaImpl implements UserDetailsService, UserServicea {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
-    @Autowired
+
     RepositoryPersonalized repositoryPersonalized;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserRoleRepository userRoleRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bcryptEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserServiceaImpl(RepositoryPersonalized repositoryPersonalized,
-                            RoleRepository roleRepository,
-                            UserRepository userRepository,
-                            UserRoleRepository userRoleRepository,
-                            BCryptPasswordEncoder bcryptEncoder) {
+    private final UserRepository userRepository;
+
+    private final UserRoleRepository userRoleRepository;
+
+    private final BCryptPasswordEncoder bcryptEncoder;
+
+    public UserServiceImpl(RepositoryPersonalized repositoryPersonalized,
+                           RoleRepository roleRepository,
+                           UserRepository userRepository,
+                           UserRoleRepository userRoleRepository,
+                           BCryptPasswordEncoder bcryptEncoder) {
         this.repositoryPersonalized = repositoryPersonalized;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -51,9 +49,9 @@ public class UserServiceaImpl implements UserDetailsService, UserServicea {
 
     /**
      * implementada desde UserDetailService para verificar que el usuario y la clave sean validas
-     * @param username
-     * @return
-     * @throws UsernameNotFoundException
+     * @param username String dado
+     * @return user de la clase security.core
+     * @throws UsernameNotFoundException expecion
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -69,8 +67,8 @@ public class UserServiceaImpl implements UserDetailsService, UserServicea {
 
     /**
      * se encarga de buscar las authorizaciones que tenga el usuario para la funcion previa
-     * @param user
-     * @return
+     * @param user usuario de entitie
+     * @return authorizaciones que posee el user
      */
     private Set<SimpleGrantedAuthority> getAuthority(User user){
         //crea una variable para almacenar las authorizaciones
@@ -86,16 +84,14 @@ public class UserServiceaImpl implements UserDetailsService, UserServicea {
 
 
     @Override
-    public UserDto saveUser(User user) {
+    public User saveUser(User user) {
 // TODO verificar el user, documento, email: que sean unicos antes de almacenar, si no devolver una expecion
         //encriptar la contraseña
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //guardar el usuario
         user.setId(repositoryPersonalized.UserID());
-        User userAux = userRepository.save(user);
-        //busca el rol por defecto para asignarlo
-        Role role = findRoleByrol("USER");
-        return saveRoleByUser(userAux, role);
+        return userRepository.save(user);
+
     }
 
     @Override
@@ -103,10 +99,10 @@ public class UserServiceaImpl implements UserDetailsService, UserServicea {
         //crea un UserRole para almacenarlo en la base de datos
         UserRole userRole = new UserRole(null,user,role);
         userRole.setId(repositoryPersonalized.UserRoleID());
-        UserRole us = userRoleRepository.save(userRole);
+        userRoleRepository.save(userRole);
         //genera un auxiliar para hacer un Json para devolver
         List<String> rolesAux = new ArrayList<>();
-        rolesAux.add("USER");
+        rolesAux.add(role.getName());
         //generar el usuario con los roles asignados y devolver
         return new UserDto(user,rolesAux);
     }
@@ -119,7 +115,6 @@ public class UserServiceaImpl implements UserDetailsService, UserServicea {
 
     @Override
     public List<User> findAllUser() {
-        List<User> users = repositoryPersonalized.findAllUser();
-        return users;
+        return repositoryPersonalized.findAllUser();
     }
 }

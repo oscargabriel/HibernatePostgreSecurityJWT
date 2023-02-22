@@ -3,7 +3,7 @@ package com.example.HibernatePostgreSecurityJWT.security.config;
 import com.example.HibernatePostgreSecurityJWT.security.component.CustomAccessDeniedHandler;
 import com.example.HibernatePostgreSecurityJWT.security.component.UnauthorizedEntryPoint;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.JwtAuthenticationFilter;
-import com.example.HibernatePostgreSecurityJWT.service.impl.UserServiceaImpl;
+import com.example.HibernatePostgreSecurityJWT.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +32,12 @@ public class WebSecurtiryConfig {
     private CustomAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
-    private UserServiceaImpl userService;
+    private UserServiceImpl userService;
 
 
     public WebSecurtiryConfig(UnauthorizedEntryPoint unauthorizedEntryPoint,
                               CustomAccessDeniedHandler accessDeniedHandler,
-                              UserServiceaImpl userService) {
+                              UserServiceImpl userService) {
         this.unauthorizedEntryPoint = unauthorizedEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
         this.userService = userService;

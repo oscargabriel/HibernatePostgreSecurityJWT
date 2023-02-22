@@ -6,14 +6,14 @@ import com.example.HibernatePostgreSecurityJWT.entities.User;
 
 import java.util.List;
 
-public interface UserServicea {
+public interface UserService {
 
     /**
      * guarda el usuario
      * @param user recibe los datos del usuario para su verifiacion y almacenar
      * @return regresa los datos del usuario
      */
-    public UserDto saveUser(User user);
+    public User saveUser(User user);
 
     /**
      * asigna los roles a los usuarios en la base de datos

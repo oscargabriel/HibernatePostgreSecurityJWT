@@ -4,9 +4,10 @@ import com.example.HibernatePostgreSecurityJWT.controller.ControllerDefault;
 import com.example.HibernatePostgreSecurityJWT.dto.controller.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
 import com.example.HibernatePostgreSecurityJWT.dto.controller.AuthToken;
+import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
-import com.example.HibernatePostgreSecurityJWT.service.UserServicea;
+import com.example.HibernatePostgreSecurityJWT.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,17 +33,17 @@ public class ControllerDefaultImpl implements ControllerDefault {
 
 
     @Autowired
-    private final UserServicea userServicea;
+    private final UserService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
 
     private final TokenProvider jwtTokenUtil;
 
     public ControllerDefaultImpl(AuthenticationManager authenticationManager,
-                                 UserServicea userServicea,
+                                 UserService userService,
                                  TokenProvider jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
-        this.userServicea = userServicea;
+        this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -82,8 +83,13 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody User user){
         System.out.println("Guardando");
+        //guarda el usuario
+        User userAux = userService.saveUser(user);
+        //busca el rol por defecto a asignar
+        Role role = userService.findRoleByrol("USER");
+        //asigna el rol y return
         // TODO: gestionar cuando sea positiva y excepcion
-        return ResponseEntity.ok().body(userServicea.saveUser(user));
+        return ResponseEntity.ok().body(userService.saveRoleByUser(userAux,role));
 
     }
 
@@ -91,7 +97,7 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @GetMapping("/findAllUser")
     public ResponseEntity<List<User>> findAllUser() {
         System.out.println("mostrando todos los usuarios");
-        List<User> users = userServicea.findAllUser();
+        List<User> users = userService.findAllUser();
         return ResponseEntity.ok().body(users);
     }
 
