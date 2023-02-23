@@ -6,6 +6,10 @@ paquete DTO son clases con estructura personalizada para ser usada en controller
 
 paquete ENTITIES estan las entidades que son reflejo de la base de datos
 
+paquete EXCEPTION gestiona las diferentes excepciones que se generan en respuesta
+
+  paquete CISTOMIZATIONS son las expeciones personalizadas que se crean en diferentes puntos que son capturadas por el controlador de expeciones
+
 paquete REPOSITORY hace la conceccion con la base de datos y ejecuta CRUD
 
   paquete DAO son funciones para llamadas REQUEST personalizadas a la base de datos

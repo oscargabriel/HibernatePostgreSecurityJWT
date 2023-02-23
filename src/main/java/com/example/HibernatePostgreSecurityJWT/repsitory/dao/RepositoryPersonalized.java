@@ -1,5 +1,6 @@
 package com.example.HibernatePostgreSecurityJWT.repsitory.dao;
 
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 
@@ -14,6 +15,14 @@ public interface RepositoryPersonalized {
     Long UserID();
     Long RoleID();
     Long UserRoleID();
+
+
+    //
+    Boolean existByEmail(String email);
+
+    Boolean existByUsername(String username);
+
+    Boolean existByDocument(String document);
 
     /**
      * recuperar un usuario apartir del username

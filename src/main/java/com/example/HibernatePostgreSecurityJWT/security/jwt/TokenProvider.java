@@ -161,6 +161,7 @@ public class TokenProvider implements Serializable {
     UsernamePasswordAuthenticationToken getAuthenticationToken(final String token,
                                                                final Authentication existingAuth,
                                                                final UserDetails userDetails) {
+
         //separa los componentes del token
         final JwtParser jwtParser = Jwts.parser().setSigningKey(SIGNING_KEY);
         final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);

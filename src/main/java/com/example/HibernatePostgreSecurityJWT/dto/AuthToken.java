@@ -1,4 +1,4 @@
-package com.example.HibernatePostgreSecurityJWT.dto.controller;
+package com.example.HibernatePostgreSecurityJWT.dto;
 
 /**
  * usado por controller para almacenar el token

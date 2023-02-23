@@ -1,5 +1,6 @@
 package com.example.HibernatePostgreSecurityJWT.repsitory.dao.Impl;
 
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
@@ -7,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import org.apache.juli.logging.Log;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,6 +43,50 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
     }
     //================================================================================
 
+
+    @Override
+    public Boolean existByEmail(String email) {
+        //consulta sql
+        Query query = entityManager.createNativeQuery(
+                "SELECT u.email FROM users u WHERE u.email = :email", String.class);
+        //indica cual es la condicion
+        query.setParameter("email",email);
+        //genera la lista
+        List<String> exist = query.getResultList();
+        //valida que no este vacia
+
+        if (exist.size()==0) {return false;}
+        return true;
+    }
+
+    @Override
+    public Boolean existByUsername(String username) {
+        //consulta sql
+        Query query = entityManager.createNativeQuery(
+                "SELECT u.username FROM users u WHERE u.username = :username", String.class);
+        //indica cual es la condicion
+        query.setParameter("username",username);
+        //genera la lista
+        List<String> exist = query.getResultList();
+        //valida que no este vacia
+        if (exist.size()==0) {return false;}
+        return true;
+    }
+
+    @Override
+    public Boolean existByDocument(String document) {
+        //consulta sql
+        Query query = entityManager.createNativeQuery(
+                "SELECT u.document FROM users u WHERE u.document = :document", String.class);
+        //indica cual es la condicion
+        query.setParameter("document",document);
+        //genera la lista
+        List<String> exist = query.getResultList();
+        //valida que no este vacia
+        if (exist.size()==0) {return false;}
+        return true;
+    }
+    //================================================================================
     @Override
     public List<User> findAllUser() {
         Query query = entityManager.createNativeQuery(

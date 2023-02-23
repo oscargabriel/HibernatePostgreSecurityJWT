@@ -1,14 +1,18 @@
 package com.example.HibernatePostgreSecurityJWT.service.impl;
 
-import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.BadCredentialsLoginFailed;
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.DataAlreadyExistsException;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,18 +37,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRoleRepository userRoleRepository;
 
-    private final BCryptPasswordEncoder bcryptEncoder;
+    private final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
     public UserServiceImpl(RepositoryPersonalized repositoryPersonalized,
                            RoleRepository roleRepository,
                            UserRepository userRepository,
-                           UserRoleRepository userRoleRepository,
-                           BCryptPasswordEncoder bcryptEncoder) {
+                           UserRoleRepository userRoleRepository) {
         this.repositoryPersonalized = repositoryPersonalized;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
-        this.bcryptEncoder = bcryptEncoder;
     }
 
     /**
@@ -54,12 +56,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      * @throws UsernameNotFoundException expecion
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username){
         //verifica que el username exista si no devuelve una expecion
         User user = repositoryPersonalized.findUserByUsername(username);
         if(user == null){
-            throw new UsernameNotFoundException("Usuario o Clave Invalida");
+            throw new BadCredentialsLoginFailed(HttpStatus.NOT_ACCEPTABLE,"Usuario invalido "+username);
         }
+
         //devueelve el usuario y las autorizaciones que tiene el usuario
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),user.getPassword(),getAuthority(user));
@@ -84,13 +87,30 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     @Override
-    public User saveUser(User user) {
-// TODO verificar el user, documento, email: que sean unicos antes de almacenar, si no devolver una expecion
+    public User saveUser(User user) throws DataAlreadyExistsException {
+        //verificar que el username no este ocupado
+        if (repositoryPersonalized.existByEmail(user.getEmail())){
+            throw new DataAlreadyExistsException(HttpStatus.CONFLICT,"Email ocupada: "+user.getEmail());
+        }
+        //verificar que el documento no este ocupado
+        if (repositoryPersonalized.existByDocument(user.getDocument())){
+            throw new DataAlreadyExistsException(HttpStatus.CONFLICT,"Documento ocupada: "+user.getDocument());
+        }
+        //verificar que el email no este ocupado
+        if (repositoryPersonalized.existByUsername(user.getUsername())){
+            throw new DataAlreadyExistsException(HttpStatus.CONFLICT,"Username ocupada: "+user.getUsername());
+        }
         //encriptar la contraseña
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //guardar el usuario
         user.setId(repositoryPersonalized.UserID());
-        return userRepository.save(user);
+        User useraux = null;
+
+        useraux = userRepository.save(user);
+
+
+
+        return useraux;
 
     }
 

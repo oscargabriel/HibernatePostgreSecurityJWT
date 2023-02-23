@@ -1,7 +1,7 @@
 package com.example.HibernatePostgreSecurityJWT.controller;
 
-import com.example.HibernatePostgreSecurityJWT.dto.controller.LoginUser;
-import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +23,8 @@ public interface ControllerDefault {
     public ResponseEntity<String> userPing();
     public ResponseEntity<String> employeePing();
     public ResponseEntity<String> adminPing();
+    public ResponseEntity<String> useremployeeePing();
+
 
 
     /**

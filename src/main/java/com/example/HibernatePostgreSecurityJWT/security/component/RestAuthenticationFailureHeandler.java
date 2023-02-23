@@ -28,7 +28,6 @@ public class RestAuthenticationFailureHeandler implements AuthenticationFailureH
                                         AuthenticationException exception) throws IOException, ServletException {
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
-
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
         data.put("status",HttpStatus.FORBIDDEN.value());

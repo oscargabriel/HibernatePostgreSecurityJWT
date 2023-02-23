@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.annotations.Comment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -18,26 +20,26 @@ import java.util.Map;
 
 
 /**
- * mensaje personalizado para los acceso denegado
+ * mensaje personalizado para los acceso denegado por rol
  */
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+
+    Logger logger = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException e) throws IOException, ServletException {
 
-        // You can create your own repsonse here to handle method level access denied reponses..
-        // Follow similar method to the bad credentials handler above.
-        System.out.println("Ejecutando CustomAccessDeniedHandler");
+        logger.warn("usuario: "+request.getRemoteUser()+" intentando ingresar a lugar prohibido: "+request.getRequestURL().toString());
+
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType("application/json");
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
         data.put("status",HttpStatus.FORBIDDEN.value());
-        data.put("message", "Access Denied, login again!");
+        data.put("message", "acceso denegado");
         data.put("path", request.getRequestURL().toString());
-        data.put("pd", "Have a good day");
 
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();

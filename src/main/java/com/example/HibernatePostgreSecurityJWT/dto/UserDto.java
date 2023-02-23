@@ -1,4 +1,4 @@
-package com.example.HibernatePostgreSecurityJWT.dto.repository;
+package com.example.HibernatePostgreSecurityJWT.dto;
 
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import jakarta.persistence.Column;

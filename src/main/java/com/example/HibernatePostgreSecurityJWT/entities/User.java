@@ -22,7 +22,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true)
+    @Column(unique = true, nullable = false)
     private String document;
 
     @Column(nullable = false)
@@ -31,7 +31,7 @@ public class User implements Serializable {
     @Column(name="last_name", nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = true)

@@ -1,6 +1,6 @@
 package com.example.HibernatePostgreSecurityJWT.service;
 
-import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 

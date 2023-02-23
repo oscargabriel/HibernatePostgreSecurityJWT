@@ -1,6 +1,8 @@
 package com.example.HibernatePostgreSecurityJWT.security.jwt;
 
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.BadCredentialsLoginFailed;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
@@ -9,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -62,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         String header = req.getHeader(HEADER_STRING);
         String username = null;
+        String password = null;
         String authToken = null;
         //verifica que la cabecerao este vacial
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
@@ -72,10 +76,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtTokenUtil.getUserNameFromToken(authToken);
             } catch (IllegalArgumentException e) {
                 logger.error("Error: El obtener el nombre de usuario del token", e);
-            } catch (ExpiredJwtException e) {
+                } catch (ExpiredJwtException e) {
                 logger.warn("Error: El token a expirado", e);
             } catch(SignatureException e){
-                logger.error("Error: El usuario o la contraseña no son validos");
+                logger.error("Error: El usuario o la contraseña no son validos",e);
+            } catch (MalformedJwtException e){
+                logger.error("cadena mal formada",e);
             }
 
         } else {
@@ -83,7 +89,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         //si el usuario no es nulo y no hay contexto de authenticacion
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             //establece el contexto de seguridad
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
@@ -98,7 +103,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
+        try {
+            chain.doFilter(req, res);
+        }catch (BadCredentialsLoginFailed e){
 
-        chain.doFilter(req, res);
+        }
     }
 }

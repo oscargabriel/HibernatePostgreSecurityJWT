@@ -1,9 +1,9 @@
 package com.example.HibernatePostgreSecurityJWT.controller.Impl;
 
 import com.example.HibernatePostgreSecurityJWT.controller.ControllerDefault;
-import com.example.HibernatePostgreSecurityJWT.dto.controller.LoginUser;
-import com.example.HibernatePostgreSecurityJWT.dto.repository.UserDto;
-import com.example.HibernatePostgreSecurityJWT.dto.controller.AuthToken;
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
+import com.example.HibernatePostgreSecurityJWT.dto.AuthToken;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
@@ -72,19 +72,26 @@ public class ControllerDefaultImpl implements ControllerDefault {
     public ResponseEntity<String> employeePing() {
         return ResponseEntity.ok("hola EMPLOYEE");
     }
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/hello_admin")
     public ResponseEntity<String> adminPing(){
         return ResponseEntity.ok("hola ADMIN");
     }
 
+    @Override
+    @PreAuthorize("hasAnyRole('USER','EMPLOYEE')")
+    @GetMapping("/hello_user_employee")
+    public ResponseEntity<String> useremployeeePing() {
+        return ResponseEntity.ok("hola USER_EMPLOYEE");
+    }
 
     @Override
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody User user){
         System.out.println("Guardando");
         //guarda el usuario
-        User userAux = userService.saveUser(user);
+            User userAux = userService.saveUser(user);
         //busca el rol por defecto a asignar
         Role role = userService.findRoleByrol("USER");
         //asigna el rol y return
