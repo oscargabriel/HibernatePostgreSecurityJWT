@@ -40,8 +40,18 @@ public interface UserService {
     public AuthToken authenticate(LoginUser loginUser);
     public List<UserDto> findAllUser();
 
+    /**
+     * actualizar un usuario con sus roles
+     * @param User
+     * @return
+     */
     public UserDto update(UserDto User);
 
+    /**
+     * eliminar un usuario dado un id administrador por un adminsitrador
+     * @param id del usuario a borrar
+     * @return username borrado
+     */
     public String delete(Long id);
 
 

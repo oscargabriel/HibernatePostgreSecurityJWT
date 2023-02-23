@@ -37,7 +37,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
         data.put("status",HttpStatus.FORBIDDEN.value());
-        data.put("message", "acceso denegado");
+        data.put("message", "acceso denegado siga intentando");
         data.put("path", request.getRequestURL().toString());
 
         OutputStream out = response.getOutputStream();

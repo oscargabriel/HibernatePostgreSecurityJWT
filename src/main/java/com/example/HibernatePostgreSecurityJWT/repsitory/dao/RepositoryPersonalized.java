@@ -1,6 +1,7 @@
 package com.example.HibernatePostgreSecurityJWT.repsitory.dao;
 
 import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 
@@ -51,5 +52,17 @@ public interface RepositoryPersonalized {
      */
     List<User> findAllUser();
 
+    /**
+     * busca el id de los roles que tengo el usuario en la tabla asociativa con roles
+     * @param id
+     * @return
+     */
     List<Long> findIdUserRoleByUserId(Long id);
+
+    /**
+     * busca un usuario por su id
+     * @param id
+     * @return
+     */
+    User findUserById(Long id);
 }

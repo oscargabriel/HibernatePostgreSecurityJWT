@@ -7,6 +7,7 @@ import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
 import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.DataAlreadyExistsException;
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.UserToDeleteNotFound;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
@@ -14,6 +15,8 @@ import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonali
 import com.example.HibernatePostgreSecurityJWT.security.jwt.JwtAuthenticationFilter;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +32,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -143,14 +146,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public String delete(Long id) {
         List<String> roles = repositoryPersonalized.findRolesByUsername(jwtAuthenticationFilter.getUsername());
+        User user = repositoryPersonalized.findUserById(id);
+        if(user ==null){
+            throw new UserToDeleteNotFound(HttpStatus.EXPECTATION_FAILED,"administrador "+jwtAuthenticationFilter.getUsername()+" intento eliminar un usuario invalido");
+        }
+        user.setPassword(" ");
         roles.forEach(x -> {
             if (x.equalsIgnoreCase("ADMIN")){
+                logger.info("administrador "
+                        +jwtAuthenticationFilter.getUsername()+
+                        " elimino a "
+                        +user);
                 deleteUserRole(id);
                 userRepository.deleteById(id);
-
             }
         });
-        return "null";
+        return "usuario "+user.getUsername()+" eliminado con exito";
     }
     private void deleteUserRole(Long id){
         List<Long> ids = repositoryPersonalized.findIdUserRoleByUserId(id);

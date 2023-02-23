@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.apache.juli.logging.Log;
 import org.springframework.stereotype.Repository;
 
@@ -162,5 +163,20 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
         if (ids.size()==0) return null;
         //devuelve la lista
         return ids;
+    }
+
+    @Override
+    public User findUserById(Long id) {
+        //consulta sql
+        Query query = entityManager.createNativeQuery(
+                "select * from users u where u.id = :id",User.class);
+        //valida la condicion
+        query.setParameter("id",id);
+        //genera una lista
+        List<User> user = query.getResultList();
+        //verifica que no este vacia
+        if (user.size()==0) return null;
+        //devuelve la lista
+        return user.get(0);
     }
 }
