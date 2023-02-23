@@ -1,6 +1,7 @@
 package com.example.HibernatePostgreSecurityJWT.dto;
 
 import com.example.HibernatePostgreSecurityJWT.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class UserDto {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String document;

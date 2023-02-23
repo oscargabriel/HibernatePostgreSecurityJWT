@@ -59,6 +59,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 user.getUsername(),user.getPassword(),getAuthority(user));
     }
 
+
+
     /**
      * se encarga de buscar las authorizaciones que tenga el usuario para la funcion previa
      * @param user usuario de entitie

@@ -48,8 +48,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * llama a la calse que genero el token
      */
     @Autowired
-    private static TokenProvider jwtTokenUtil;
+    private TokenProvider jwtTokenUtil;
 
+    private String username = null;
+
+    private static String aux;
 
     /**
      * filtra el token y devuelve expeciones segun sea el caso
@@ -64,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws ServletException, IOException {
         String header = req.getHeader(HEADER_STRING);
-        String username = null;
+        username = null;
         String password = null;
         String authToken = null;
         //verifica que la cabecerao este vacial
@@ -73,19 +76,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authToken = header.replace(TOKEN_PREFIX,"");
             //obtiene el username y devuelve diferentes expecciones dado el caso
             username = getUsernameForToken(authToken);
-            /*
-            try {
-                username = jwtTokenUtil.getUserNameFromToken(authToken);
-            } catch (IllegalArgumentException e) {
-                logger.error("Error: El obtener el nombre de usuario del token", e);
-            } catch (ExpiredJwtException e) {
-                logger.warn("Error: El token a expirado", e);
-            } catch (SignatureException e) {
-                logger.error("Error: El usuario o la contraseña no son validos", e);
-            } catch (MalformedJwtException e) {
-                logger.error("cadena mal formada", e);
-            }
-            */
 
         } else {
             logger.warn("No se pudo encontrar la cadena portadora, se ignorará el encabezado");
@@ -93,6 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //si el usuario no es nulo y no hay contexto de authenticacion
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
             //establece el contexto de seguridad
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
 
@@ -124,6 +115,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("cadena mal formada", e);
         }
 
+        return username;
+    }
+
+    public String getUsername() {
         return username;
     }
 }

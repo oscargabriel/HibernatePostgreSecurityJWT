@@ -70,7 +70,7 @@ public class WebSecurtiryConfig {
                 .requestMatchers("/hello_admin").hasRole("ADMIN")
                 .requestMatchers("/hello_user_employee").hasAnyRole("USER","EMPLOYEE")
                 .requestMatchers("/update").hasAnyRole("EMPLOYEE","ADMIN")
-                .requestMatchers("delete").hasRole("ADMIN")
+                .requestMatchers("/delete/*").hasRole("ADMIN")
 
                 //indica que hay que estar authenticado para cualquier otra pagina que no sea mencioanda
                 //solo que no importara que rol tenga el usuario que este haciendo los llamados

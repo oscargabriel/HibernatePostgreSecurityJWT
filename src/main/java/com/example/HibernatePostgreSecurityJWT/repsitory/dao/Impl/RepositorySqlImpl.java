@@ -128,6 +128,8 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
         return role.get(0);
     }
 
+
+
     @Override
     public List<String> findRolesByUsername(String username) {
         //consulta sql

@@ -40,7 +40,7 @@ public interface ControllerDefault {
      * muestra todos los usuarios en la base de datos
      * @return
      */
-    public ResponseEntity<List<User>> findAllUser();
+    public ResponseEntity<List<UserDto>> findAllUser();
 
     /**
      * autenticar usuario

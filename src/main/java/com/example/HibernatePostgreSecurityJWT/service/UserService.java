@@ -38,7 +38,7 @@ public interface UserService {
      * @return
      */
     public AuthToken authenticate(LoginUser loginUser);
-    public List<User> findAllUser();
+    public List<UserDto> findAllUser();
 
     public UserDto update(UserDto User);
 

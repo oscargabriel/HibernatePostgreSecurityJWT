@@ -11,6 +11,7 @@ import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
+import com.example.HibernatePostgreSecurityJWT.security.jwt.JwtAuthenticationFilter;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +43,27 @@ public class UserServiceImpl implements UserService {
 
     private final UserRoleRepository userRoleRepository;
 
-    private final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder bcryptEncoder;
+
+    @Autowired
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public UserServiceImpl(AuthenticationManager authenticationManager,
                            RepositoryPersonalized repositoryPersonalized,
                            RoleRepository roleRepository,
                            UserRepository userRepository,
                            UserRoleRepository userRoleRepository,
-                           TokenProvider jwtTokenUtil) {
+                           TokenProvider jwtTokenUtil,
+                           BCryptPasswordEncoder bcryptEncoder,
+    JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.repositoryPersonalized = repositoryPersonalized;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.bcryptEncoder = bcryptEncoder;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
     @Override
     public User saveUser(User user) throws DataAlreadyExistsException {
@@ -100,13 +108,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Role findRoleByrol(String role){
-        return  repositoryPersonalized.findRoleByNameRol(role);
+        return repositoryPersonalized.findRoleByNameRol(role);
     }
 
-
     @Override
-    public List<User> findAllUser() {
-        return repositoryPersonalized.findAllUser();
+    public List<UserDto> findAllUser() {
+        List<UserDto> userDtos = new ArrayList<>();
+        List<User> users = repositoryPersonalized.findAllUser();
+        users.forEach(x -> {
+                    userDtos.add(new UserDto(x,repositoryPersonalized.findRolesByUsername(x.getUsername())));
+                }
+                );
+        return userDtos;
     }
 
     @Override
@@ -129,7 +142,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String delete(Long id) {
-
+        System.out.println(
+        jwtAuthenticationFilter.getUsername());
         return "null";
     }
 }

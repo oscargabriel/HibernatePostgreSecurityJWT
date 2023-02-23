@@ -99,9 +99,9 @@ public class ControllerDefaultImpl implements ControllerDefault {
 
     @Override
     @GetMapping("/findAllUser")
-    public ResponseEntity<List<User>> findAllUser() {
+    public ResponseEntity<List<UserDto>> findAllUser() {
         System.out.println("mostrando todos los usuarios");
-        List<User> users = userService.findAllUser();
+        List<UserDto> users = userService.findAllUser();
         return ResponseEntity.ok().body(users);
     }
 
