@@ -142,8 +142,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String delete(Long id) {
-        System.out.println(
-        jwtAuthenticationFilter.getUsername());
+        List<String> roles = repositoryPersonalized.findRolesByUsername(jwtAuthenticationFilter.getUsername());
+        roles.forEach(x -> {
+            if (x.equalsIgnoreCase("ADMIN")){
+                deleteUserRole(id);
+                userRepository.deleteById(id);
+
+            }
+        });
         return "null";
+    }
+    private void deleteUserRole(Long id){
+        List<Long> ids = repositoryPersonalized.findIdUserRoleByUserId(id);
+        ids.forEach(x->{
+            userRoleRepository.deleteById(x);
+        });
     }
 }

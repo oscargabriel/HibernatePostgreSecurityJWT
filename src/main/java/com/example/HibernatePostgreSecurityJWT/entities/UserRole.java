@@ -15,12 +15,12 @@ public class UserRole implements Serializable {
     //@GeneratedValue(strategy = GenerationType.IDENTITY) no genera, se uso funcion personalizada
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id",
             foreignKey = @ForeignKey(name = "fk_userrole_user"))
     private User userId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "role_id",
             foreignKey = @ForeignKey(name = "fk_userrole_role"))
     private Role roleId;

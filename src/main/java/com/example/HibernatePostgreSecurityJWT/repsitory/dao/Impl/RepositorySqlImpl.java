@@ -148,4 +148,19 @@ public class RepositorySqlImpl implements RepositoryPersonalized {
         //devuelve la lista
         return roles;
     }
+
+    @Override
+    public List<Long> findIdUserRoleByUserId(Long id) {
+        //consulta sql
+        Query query = entityManager.createNativeQuery(
+                "select ur.id from user_role ur where ur.user_id = :id",Long.class);
+        //valida la condicion
+        query.setParameter("id",id);
+        //genera una lista
+        List<Long> ids = query.getResultList();
+        //verifica que no este vacia
+        if (ids.size()==0) return null;
+        //devuelve la lista
+        return ids;
+    }
 }

@@ -50,4 +50,6 @@ public interface RepositoryPersonalized {
      * @return
      */
     List<User> findAllUser();
+
+    List<Long> findIdUserRoleByUserId(Long id);
 }
