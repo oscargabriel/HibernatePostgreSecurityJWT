@@ -1,17 +1,17 @@
-package com.example.HibernatePostgreSecurityJWT.exception;
+package com.example.HibernatePostgreSecurityJWT.exception.customizations;
 
-import com.example.HibernatePostgreSecurityJWT.exception.customizations.BadCredentialsLoginFailed;
-import com.example.HibernatePostgreSecurityJWT.exception.customizations.DataAlreadyExistsException;
+
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.DataAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,16 +59,14 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(data);
     }
 
-    @ExceptionHandler(BadCredentialsLoginFailed.class)
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public ResponseEntity<Map<String, Object>> handleEmailAlreadyExistsException(BadCredentialsLoginFailed exception){
-        //logger.warn(exception.getReason()+" intentando acceder");
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Map<String, Object>> handleBadCredentialsException(BadCredentialsException exception){
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
-        data.put("status",HttpStatus.NOT_ACCEPTABLE.value());
+        data.put("status",HttpStatus.FORBIDDEN.value());
         data.put("reason","usuario o clave invalida");
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(data);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(data);
     }
-
 
 }

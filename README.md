@@ -10,6 +10,8 @@ paquete EXCEPTION gestiona las diferentes excepciones que se generan en respuest
 
   paquete CISTOMIZATIONS son las expeciones personalizadas que se crean en diferentes puntos que son capturadas por el controlador de expeciones
 
+  paquete EXCEPTIONRED gestiona las exepciones que tengan asociadas una direccion de red
+
 paquete REPOSITORY hace la conceccion con la base de datos y ejecuta CRUD
 
   paquete DAO son funciones para llamadas REQUEST personalizadas a la base de datos
@@ -17,8 +19,6 @@ paquete REPOSITORY hace la conceccion con la base de datos y ejecuta CRUD
   paquete JPA usa las funciones predefinidas por jpa para los llamdos CREATE, UPDATE, DELETE
 
 paquete SECURITY se gestiona la seguridad del programa administradas por los paquetes
-
-  paquete COMPONENT se hacen los mensajes personalizados para las exepciones
 
   paquete CONFIG se establecen las reglas de coneccion, acceso a pagina y caveceras
 

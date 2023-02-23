@@ -1,7 +1,7 @@
 package com.example.HibernatePostgreSecurityJWT.security.config;
 
-import com.example.HibernatePostgreSecurityJWT.security.component.CustomAccessDeniedHandler;
-import com.example.HibernatePostgreSecurityJWT.security.component.UnauthorizedEntryPoint;
+import com.example.HibernatePostgreSecurityJWT.exception.ExceptionRed.CustomAccessDeniedHandler;
+import com.example.HibernatePostgreSecurityJWT.exception.ExceptionRed.UnauthorizedEntryPoint;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.JwtAuthenticationFilter;
 import com.example.HibernatePostgreSecurityJWT.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

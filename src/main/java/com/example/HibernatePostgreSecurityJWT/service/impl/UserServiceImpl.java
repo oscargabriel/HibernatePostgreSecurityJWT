@@ -1,18 +1,17 @@
 package com.example.HibernatePostgreSecurityJWT.service.impl;
 
-import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.entities.UserRole;
-import com.example.HibernatePostgreSecurityJWT.exception.customizations.BadCredentialsLoginFailed;
-import com.example.HibernatePostgreSecurityJWT.exception.customizations.DataAlreadyExistsException;
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.DataAlreadyExistsException;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -60,7 +59,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         //verifica que el username exista si no devuelve una expecion
         User user = repositoryPersonalized.findUserByUsername(username);
         if(user == null){
-            throw new BadCredentialsLoginFailed(HttpStatus.NOT_ACCEPTABLE,"Usuario invalido "+username);
+            throw new BadCredentialsException("Usuario invalido "+username);
         }
 
         //devueelve el usuario y las autorizaciones que tiene el usuario

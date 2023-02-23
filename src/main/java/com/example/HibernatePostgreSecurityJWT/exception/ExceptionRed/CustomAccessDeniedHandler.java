@@ -1,10 +1,9 @@
-package com.example.HibernatePostgreSecurityJWT.security.component;
+package com.example.HibernatePostgreSecurityJWT.exception.ExceptionRed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.annotations.Comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

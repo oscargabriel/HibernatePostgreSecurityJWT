@@ -1,4 +1,4 @@
-package com.example.HibernatePostgreSecurityJWT.security.component;
+package com.example.HibernatePostgreSecurityJWT.exception.ExceptionRed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * mensaje personalizado para aunteticacion fallida
+ * mensaje personalizado para cabecera erronea
  */
 
 @Component
