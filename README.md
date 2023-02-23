@@ -1,3 +1,9 @@
+programa que gestiona usuarios
+con autenticacion
+implementado token y roles para el acceso
+usando base de datos postgreSQL
+
+
 usando Spring Boot 3.0.2
 
 paquete CONTROLLER se encarga de recibir las solicitudes http y llama a service

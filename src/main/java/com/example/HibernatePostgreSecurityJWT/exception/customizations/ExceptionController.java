@@ -26,6 +26,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
 
     Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
+
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Map<String, Object>> handleNoSuchElementException(NoSuchElementException exception){
@@ -37,6 +38,11 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(data);
     }
 
+    /**
+     * exepcion cuando hay argumentos ilegales
+     * @param exception
+     * @return
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException exception){
@@ -48,6 +54,11 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(data);
     }
 
+    /**
+     * exepcion cuando se intenta registrar usuario con credenciales duplicadas
+     * @param exception
+     * @return
+     */
     @ExceptionHandler(DataAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Map<String, Object>> handleEmailAlreadyExistsException(DataAlreadyExistsException exception){
@@ -59,13 +70,18 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(data);
     }
 
+    /**
+     * exepcion cuando no se pudo autenticar el usuario por usuario o clave invalida
+     * @param exception
+     * @return
+     */
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<Map<String, Object>> handleBadCredentialsException(BadCredentialsException exception){
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
         data.put("status",HttpStatus.FORBIDDEN.value());
-        data.put("reason","usuario o clave invalida");
+        data.put("reason",exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(data);
     }
 
