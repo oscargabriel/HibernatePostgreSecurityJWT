@@ -1,8 +1,11 @@
 package com.example.HibernatePostgreSecurityJWT.service;
 
+import com.example.HibernatePostgreSecurityJWT.dto.AuthToken;
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -34,5 +37,12 @@ public interface UserService {
      * muestra los usuarios almacenados en la base de datos
      * @return
      */
+    public AuthToken authenticate(LoginUser loginUser);
     public List<User> findAllUser();
+
+    public UserDto update(UserDto User);
+
+    public String delete(Long id);
+
+
 }

@@ -3,7 +3,7 @@ package com.example.HibernatePostgreSecurityJWT.security.config;
 import com.example.HibernatePostgreSecurityJWT.exception.ExceptionRed.CustomAccessDeniedHandler;
 import com.example.HibernatePostgreSecurityJWT.exception.ExceptionRed.UnauthorizedEntryPoint;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.JwtAuthenticationFilter;
-import com.example.HibernatePostgreSecurityJWT.service.impl.UserServiceImpl;
+import com.example.HibernatePostgreSecurityJWT.service.impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,12 +32,12 @@ public class WebSecurtiryConfig {
     private CustomAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserDetailServiceImpl userService;
 
 
     public WebSecurtiryConfig(UnauthorizedEntryPoint unauthorizedEntryPoint,
                               CustomAccessDeniedHandler accessDeniedHandler,
-                              UserServiceImpl userService) {
+                              UserDetailServiceImpl userService) {
         this.unauthorizedEntryPoint = unauthorizedEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
         this.userService = userService;
@@ -69,6 +69,8 @@ public class WebSecurtiryConfig {
                 .requestMatchers("/hello_user").hasRole("USER")
                 .requestMatchers("/hello_admin").hasRole("ADMIN")
                 .requestMatchers("/hello_user_employee").hasAnyRole("USER","EMPLOYEE")
+                .requestMatchers("/update").hasAnyRole("EMPLOYEE","ADMIN")
+                .requestMatchers("delete").hasRole("ADMIN")
 
                 //indica que hay que estar authenticado para cualquier otra pagina que no sea mencioanda
                 //solo que no importara que rol tenga el usuario que este haciendo los llamados

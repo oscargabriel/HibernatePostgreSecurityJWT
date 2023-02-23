@@ -1,5 +1,7 @@
 package com.example.HibernatePostgreSecurityJWT.service.impl;
 
+import com.example.HibernatePostgreSecurityJWT.dto.AuthToken;
+import com.example.HibernatePostgreSecurityJWT.dto.LoginUser;
 import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
@@ -9,25 +11,29 @@ import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.RoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.JPA.UserRoleRepository;
 import com.example.HibernatePostgreSecurityJWT.repsitory.dao.RepositoryPersonalized;
+import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-@Service(value = "userService")
-public class UserServiceImpl implements UserDetailsService, UserService {
+@Service
+public class UserServiceImpl implements UserService {
 
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    private final TokenProvider jwtTokenUtil;
     RepositoryPersonalized repositoryPersonalized;
 
     private final RoleRepository roleRepository;
@@ -38,53 +44,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 
-    public UserServiceImpl(RepositoryPersonalized repositoryPersonalized,
+    public UserServiceImpl(AuthenticationManager authenticationManager,
+                           RepositoryPersonalized repositoryPersonalized,
                            RoleRepository roleRepository,
                            UserRepository userRepository,
-                           UserRoleRepository userRoleRepository) {
+                           UserRoleRepository userRoleRepository,
+                           TokenProvider jwtTokenUtil) {
         this.repositoryPersonalized = repositoryPersonalized;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
-
-    /**
-     * implementada desde UserDetailService para verificar que el usuario y la clave sean validas
-     * @param username String dado
-     * @return user de la clase security.core
-     * @throws UsernameNotFoundException expecion
-     */
-    @Override
-    public UserDetails loadUserByUsername(String username){
-        //verifica que el username exista si no devuelve una expecion
-        User user = repositoryPersonalized.findUserByUsername(username);
-        if(user == null){
-            throw new BadCredentialsException("Usuario invalido "+username);
-        }
-
-        //devueelve el usuario y las autorizaciones que tiene el usuario
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),user.getPassword(),getAuthority(user));
-    }
-
-    /**
-     * se encarga de buscar las authorizaciones que tenga el usuario para la funcion previa
-     * @param user usuario de entitie
-     * @return authorizaciones que posee el user
-     */
-    private Set<SimpleGrantedAuthority> getAuthority(User user){
-        //crea una variable para almacenar las authorizaciones
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        //crea una lista de las authorizaciones
-        List<String> roles = repositoryPersonalized.findRolesByUsername(user.getUsername());
-        //los asigna y retorna
-        roles.forEach( rol -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+rol));
-        });
-        return authorities;
-    }
-
-
     @Override
     public User saveUser(User user) throws DataAlreadyExistsException {
         //verificar que el username no este ocupado
@@ -135,5 +107,29 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public List<User> findAllUser() {
         return repositoryPersonalized.findAllUser();
+    }
+
+    @Override
+    public AuthToken authenticate(LoginUser loginUser) {
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginUser.getUsername(),
+                        loginUser.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final String token = jwtTokenUtil.generateToken(authentication);
+        return new AuthToken(token);
+    }
+
+    @Override
+    public UserDto update(UserDto User) {
+        return null;
+    }
+
+    @Override
+    public String delete(Long id) {
+
+        return "null";
     }
 }

@@ -8,6 +8,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * llama a la calse que genero el token
      */
     @Autowired
-    private TokenProvider jwtTokenUtil;
+    private static TokenProvider jwtTokenUtil;
 
 
     /**
@@ -70,17 +72,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             authToken = header.replace(TOKEN_PREFIX,"");
             //obtiene el username y devuelve diferentes expecciones dado el caso
+            username = getUsernameForToken(authToken);
+            /*
             try {
                 username = jwtTokenUtil.getUserNameFromToken(authToken);
             } catch (IllegalArgumentException e) {
                 logger.error("Error: El obtener el nombre de usuario del token", e);
-                } catch (ExpiredJwtException e) {
+            } catch (ExpiredJwtException e) {
                 logger.warn("Error: El token a expirado", e);
-            } catch(SignatureException e){
-                logger.error("Error: El usuario o la contraseña no son validos",e);
-            } catch (MalformedJwtException e){
-                logger.error("cadena mal formada",e);
+            } catch (SignatureException e) {
+                logger.error("Error: El usuario o la contraseña no son validos", e);
+            } catch (MalformedJwtException e) {
+                logger.error("cadena mal formada", e);
             }
+            */
 
         } else {
             logger.warn("No se pudo encontrar la cadena portadora, se ignorará el encabezado");
@@ -102,5 +107,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
             chain.doFilter(req, res);
+    }
+
+    public String getUsernameForToken(String token){
+        Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+        String username=null;
+        try {
+            username = jwtTokenUtil.getUserNameFromToken(token);
+        } catch (IllegalArgumentException e) {
+            log.error("Error: El obtener el nombre de usuario del token", e);
+        } catch (ExpiredJwtException e) {
+            log.warn("Error: El token a expirado", e);
+        } catch (SignatureException e) {
+            log.error("Error: El usuario o la contraseña no son validos", e);
+        } catch (MalformedJwtException e) {
+            log.error("cadena mal formada", e);
+        }
+
+        return username;
     }
 }

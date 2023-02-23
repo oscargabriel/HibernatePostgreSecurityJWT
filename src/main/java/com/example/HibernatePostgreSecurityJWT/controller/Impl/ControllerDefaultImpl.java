@@ -8,6 +8,7 @@ import com.example.HibernatePostgreSecurityJWT.entities.Role;
 import com.example.HibernatePostgreSecurityJWT.entities.User;
 import com.example.HibernatePostgreSecurityJWT.security.jwt.TokenProvider;
 import com.example.HibernatePostgreSecurityJWT.service.UserService;
+import com.example.HibernatePostgreSecurityJWT.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,17 +35,13 @@ public class ControllerDefaultImpl implements ControllerDefault {
 
     @Autowired
     private final UserService userService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
-    private final TokenProvider jwtTokenUtil;
 
-    public ControllerDefaultImpl(AuthenticationManager authenticationManager,
-                                 UserService userService,
-                                 TokenProvider jwtTokenUtil) {
-        this.authenticationManager = authenticationManager;
+
+
+    public ControllerDefaultImpl(UserServiceImpl userService) {
         this.userService = userService;
-        this.jwtTokenUtil = jwtTokenUtil;
+
     }
 
     @Override
@@ -112,14 +109,21 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody LoginUser loginUser){
         System.out.println("authenticando");
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUser.getUsername(),
-                        loginUser.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+        return ResponseEntity.ok(userService.authenticate(loginUser));
+    }
+
+    @Override
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PutMapping("/update")
+    public ResponseEntity<UserDto> update(UserDto user) {
+        return ResponseEntity.ok(userService.update(user));
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+
+        return ResponseEntity.ok(userService.delete(id));
     }
 }
