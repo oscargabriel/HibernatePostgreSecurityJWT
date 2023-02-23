@@ -1,5 +1,6 @@
 package com.example.HibernatePostgreSecurityJWT.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,25 +17,27 @@ public class User implements Serializable {
     //@GeneratedValue(strategy = GenerationType.IDENTITY) no genera, se uso funcion personalizada
     private Long id;
 
-    @Column(unique = true, nullable = false)
+
+    @Column(unique = true, length = 30, nullable = false)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
     @Column(unique = true, nullable = false)
     private String document;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 50)
     private String name;
 
-    @Column(name="last_name", nullable = false)
+    @Column(name="last_name", nullable = false,length = 50)
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false,length = 50)
     private String email;
 
-    @Column(nullable = true)
+    @Column(nullable = true,length = 50)
     private String phone;
 
     public User() {
