@@ -2,6 +2,7 @@ package com.example.HibernatePostgreSecurityJWT.exception.customizations;
 
 
 import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.DataAlreadyExistsException;
+import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.UserModificationException;
 import com.example.HibernatePostgreSecurityJWT.exception.customizations.custom.UserToDeleteNotFound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +90,16 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserToDeleteNotFound.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     public ResponseEntity<Map<String, Object>> handleNullPointerException(UserToDeleteNotFound exception){
+        Map<String, Object> data = new HashMap<>();
+        data.put("timestamp", new Date());
+        data.put("status",HttpStatus.EXPECTATION_FAILED.value());
+        data.put("reason",exception.getReason());
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(data);
+    }
+
+    @ExceptionHandler(UserModificationException.class)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+    public ResponseEntity<Map<String, Object>> handleNullPointerException(UserModificationException exception){
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
         data.put("status",HttpStatus.EXPECTATION_FAILED.value());

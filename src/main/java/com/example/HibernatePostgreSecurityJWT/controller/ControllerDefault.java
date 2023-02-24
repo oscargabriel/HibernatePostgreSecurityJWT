@@ -55,7 +55,7 @@ public interface ControllerDefault {
      * @param user con todos los datos
      * @return el usuario una vez modificado
      */
-    public ResponseEntity<UserDto> update(@RequestBody UserDto user);
+    public ResponseEntity<User> update(@RequestBody User user);
 
     /**
      * elimina un usuario por su id, previamente tiene que estar auttenticado y tener rol de admin

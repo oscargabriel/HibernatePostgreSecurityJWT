@@ -42,10 +42,10 @@ public interface UserService {
 
     /**
      * actualizar un usuario con sus roles
-     * @param User
+     * @param userdto
      * @return
      */
-    public UserDto update(UserDto User);
+    public User update(User userdto);
 
     /**
      * eliminar un usuario dado un id administrador por un adminsitrador

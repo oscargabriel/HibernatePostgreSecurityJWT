@@ -113,9 +113,10 @@ public class ControllerDefaultImpl implements ControllerDefault {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PutMapping("/update")
-    public ResponseEntity<UserDto> update(UserDto user) {
+    public ResponseEntity<User> update(@RequestBody User user) {
+        System.out.println("user");
         return ResponseEntity.ok(userService.update(user));
     }
 
@@ -123,7 +124,6 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-
         return ResponseEntity.ok(userService.delete(id));
     }
 }

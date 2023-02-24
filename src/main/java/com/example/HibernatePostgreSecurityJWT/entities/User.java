@@ -1,10 +1,12 @@
 package com.example.HibernatePostgreSecurityJWT.entities;
 
+import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * entidad usuario
@@ -51,6 +53,16 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+    }
+    public User(UserDto userDto) {
+        this.id = userDto.getId();
+        this.username = userDto.getUsername();
+        this.password = userDto.getPassword();
+        this.document = userDto.getDocument();
+        this.name = userDto.getName();
+        this.lastName = userDto.getLastName();
+        this.email = userDto.getEmail();
+        this.phone = userDto.getPhone();
     }
 
     public Long getId() {
