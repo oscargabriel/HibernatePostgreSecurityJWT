@@ -180,6 +180,10 @@ public class ControllerDefaultImpl implements ControllerDefault {
             case "lastname":
                 regex = "^([A-Za-z]{4,30})$";
                 break;
+            case "fecha":
+                regex = "^([0-9]{1,2})/([0-9]{1,2})/([0-9]{2,4})$";
+                break;
+
             default:
                 regex=null;
         }
