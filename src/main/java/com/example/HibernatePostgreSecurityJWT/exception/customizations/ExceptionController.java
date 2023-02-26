@@ -47,7 +47,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
      * @return
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException exception){
         Map<String, Object> data = new HashMap<>();
         data.put("timestamp", new Date());
