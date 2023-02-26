@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.management.InvalidApplicationException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,4 +108,13 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(data);
     }
 
+    @ExceptionHandler(InvalidApplicationException.class)
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    public ResponseEntity<Map<String, Object>> handleNullPointerException(InvalidApplicationException exception){
+        Map<String, Object> data = new HashMap<>();
+        data.put("timestamp", new Date());
+        data.put("status",HttpStatus.PRECONDITION_FAILED.value());
+        data.put("reason",exception.getMessage());
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(data);
+    }
 }
