@@ -165,7 +165,7 @@ public class ControllerDefaultImpl implements ControllerDefault {
     protected void validarExprecionRegular(String cadena, String tipo){
         switch (tipo) {
             case "email":
-                regex = "^([A-Za-z0-9]{1})([-_\\.A-Za-z0-9]+)([A-Za-z0-9]{1})*@+([A-Za-z0-9\\.]+)*([A-Za-z]{2,})$";
+                regex = "^([A-Za-z0-9]{1})([-_\\.A-Za-z0-9]{0,})([A-Za-z0-9]{1})@([A-Za-z0-9\\.]+)*([A-Za-z]{2,})$";
                 break;
             case "username":
                 regex = "^([A-Za-z0-9]{1})([A-Za-z0-9-_\\.]{2,20})([A-Za-z0-9]{1})$";
@@ -190,8 +190,8 @@ public class ControllerDefaultImpl implements ControllerDefault {
         if(regex!=null) {
             Pattern pat = Pattern.compile(regex);
             math = pat.matcher(cadena);
-            if(math.find()){
-                throw new InvalidExpressionException(HttpStatus.PRECONDITION_FAILED,"el campo de" +tipo+"no es valido");
+            if(!math.find()){
+                throw new InvalidExpressionException(HttpStatus.PRECONDITION_FAILED,"el campo de " +tipo+" no es valido");
             }
         }
 
