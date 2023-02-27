@@ -35,11 +35,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class UserServiceImpl implements UserService {
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
+    private final AuthenticationManager authenticationManager;
 
     private final TokenProvider jwtTokenUtil;
-    RepositoryPersonalized repositoryPersonalized;
+    private final RepositoryPersonalized repositoryPersonalized;
 
     private final RoleRepository roleRepository;
 
@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bcryptEncoder;
 
-    @Autowired
-    JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public UserServiceImpl(AuthenticationManager authenticationManager,
                            RepositoryPersonalized repositoryPersonalized,
@@ -76,13 +76,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         //guardar el usuario
         user.setId(repositoryPersonalized.UserID());
-        User useraux = null;
-
-        useraux = userRepository.save(user);
-
-
-
-        return useraux;
+        return userRepository.save(user);
 
     }
 
