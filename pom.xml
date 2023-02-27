@@ -82,7 +82,13 @@
 			<version>5.9.2</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		<!-- dependencia para las auditorias-->
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<version>6.1.7.Final</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

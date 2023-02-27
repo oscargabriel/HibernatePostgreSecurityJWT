@@ -3,9 +3,14 @@ package com.example.HibernatePostgreSecurityJWT.entities;
 import com.example.HibernatePostgreSecurityJWT.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.envers.Audited;
+//import org.hibernate.envers.Audited;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +18,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
+@Audited
 public class User implements Serializable {
 
     @Id
@@ -40,6 +46,33 @@ public class User implements Serializable {
 
     @Column(nullable = true,length = 50)
     private String phone;
+
+    @Column(name = "birt_date")
+    private LocalDateTime birtDate;
+
+    @Column(name = "edit_date")
+    private LocalDateTime editDate;
+
+    @Column(name = "created_on")
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+
+
+    /* coleccion enbebida que almacena la lista con el id del empleado
+    @ElementCollection
+    private List<String> preferencias = new ArrayList<>();
+    puede ser Set (no admite duplicados), Map (clave, valor)
+    */
+
+    /* enumareciones para gestionar roles
+    @Enumerated(EnumType.STRING)
+    EmployeeCategory category;
+
+    public enum EmployeeCategory {
+    JUNIOR, SENIOR, ANALYST
+}
+
+    */
 
     public User() {
     }
@@ -127,6 +160,50 @@ public class User implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public LocalDateTime getBirtDate() {
+        return birtDate;
+    }
+
+    public void setBirtDate(LocalDateTime birtDate) {
+        this.birtDate = birtDate;
+    }
+
+    public LocalDateTime getEditDate() {
+        return editDate;
+    }
+
+    public void setEditDate(LocalDateTime editDate) {
+        this.editDate = editDate;
+    }
+
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    /**
+     * Método que se ejecuta antes de insertar una entidad Employee en base de datos
+     * Antes de crear.
+     */
+    @PrePersist//antes de crear
+    public void prePersist() {
+        System.out.println("prePersist");
+        this.setEditDate(LocalDateTime.now());
+    }
+    @PreUpdate//antes de editar
+    public void preUpdate() {
+        System.out.println("preUpdate");
+        this.setEditDate(LocalDateTime.now());
+    }
+    @PreRemove//antes de eliminar un empleado
+    public void preRemove() {
+        System.out.println("preRemove");
+        // this.setCars(new ArrayList<>());
     }
 
 
