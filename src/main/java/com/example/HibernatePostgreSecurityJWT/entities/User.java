@@ -192,17 +192,14 @@ public class User implements Serializable {
      */
     @PrePersist//antes de crear
     public void prePersist() {
-        System.out.println("prePersist");
         this.setEditDate(LocalDateTime.now());
     }
     @PreUpdate//antes de editar
     public void preUpdate() {
-        System.out.println("preUpdate");
         this.setEditDate(LocalDateTime.now());
     }
     @PreRemove//antes de eliminar un empleado
     public void preRemove() {
-        System.out.println("preRemove");
         // this.setCars(new ArrayList<>());
     }
 

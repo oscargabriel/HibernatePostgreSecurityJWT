@@ -130,7 +130,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User userNew) {
-        System.out.println("update");
         AtomicReference<Boolean> aprobado = new AtomicReference<>(false);
         //se obtiene el username del que esta haciendo la peticion
         List<String> roles = repositoryPersonalized.findRolesByUsername(jwtAuthenticationFilter.getUsername());
@@ -148,13 +147,11 @@ public class UserServiceImpl implements UserService {
                         jwtAuthenticationFilter.getUsername());
                 if(useraux.getId()==userOld.getId()){
                     aprobado.set(true);
-                    System.err.println("aprobado por ser empleado");
                 }
             }
             //si es admin puede hacer sobre otros suarios
             if (rolecabecera.equalsIgnoreCase("ADMIN")){
                 aprobado.set(true);
-                System.err.println("aprobado por ser admin");
             }
         });
         if(aprobado.get()){

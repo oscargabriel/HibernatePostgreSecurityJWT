@@ -58,14 +58,12 @@ public class ControllerDefaultImpl implements ControllerDefault {
     @Override
     @GetMapping("/hola")
     public ResponseEntity<String> hola(){
-        System.out.println("saludo");
         return ResponseEntity.ok("hola");
     }
 
     @Override
     @GetMapping("/hola_authenticate")
     public ResponseEntity<String> holaauthenticate() {
-        System.out.println("authenticate");
         return ResponseEntity.ok("hola authenticate");
     }
     @Override
