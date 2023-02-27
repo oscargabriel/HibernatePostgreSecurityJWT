@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                            UserRoleRepository userRoleRepository,
                            TokenProvider jwtTokenUtil,
                            BCryptPasswordEncoder bcryptEncoder,
-    JwtAuthenticationFilter jwtAuthenticationFilter) {
+                           JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.repositoryPersonalized = repositoryPersonalized;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
                         +jwtAuthenticationFilter.getUsername()+
                         " elimino a "
                         +user);
-
+                deleteUserRole(id);
                 userRepository.deleteById(id);
             }
         });
