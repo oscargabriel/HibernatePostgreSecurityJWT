@@ -1,8 +1,10 @@
 programa que gestiona usuarios
-con autenticacion
-implementado token y roles para el acceso
-usando base de datos postgreSQL
 
+con 
+-autenticacion
+-token y roles
+-base de datos postgreSQL
+-auditoria
 
 usando Spring Boot 3.0.2
 
