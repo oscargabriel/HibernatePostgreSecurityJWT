@@ -23,7 +23,12 @@ class RepositorySqlImplTest {
         Boolean result = repositorySql.existByEmail(email);
         assertEquals(false, result);
     }
-
+    @Test
+    void ExistByEmail() {
+        String email = "zaos@gmail.com";
+        Boolean result = repositorySql.existByEmail(email);
+        assertEquals(true, result);
+    }
     @Test
     void existByUsername() {
     }
