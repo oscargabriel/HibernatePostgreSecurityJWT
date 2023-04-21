@@ -100,6 +100,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             chain.doFilter(req, res);
     }
 
+    /**
+     * verificacion que el token sea valido
+     * @param token llega por cabecera en la solicitud
+     * @return si el token es valido devuelve el usuario, caso contrario devuelve null y es tratado
+     *          en la funcion que la invoca
+     */
     public String getUsernameForToken(String token){
         Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
         String username=null;
