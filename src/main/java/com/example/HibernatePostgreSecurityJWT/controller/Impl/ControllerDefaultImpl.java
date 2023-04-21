@@ -40,10 +40,6 @@ import java.util.regex.Pattern;
 public class ControllerDefaultImpl implements ControllerDefault {
     Logger logger = LoggerFactory.getLogger(ControllerDefaultImpl.class);
 
-
-    private Pattern pat = null;
-    private Matcher math = null;
-
     @Autowired
     private final UserService userService;
 
@@ -162,6 +158,9 @@ public class ControllerDefaultImpl implements ControllerDefault {
      */
     protected void validarExprecionRegular(String cadena, String tipo){
         String regex = null;
+        Pattern pat = null;
+        Matcher math = null;
+
         switch (tipo) {
             case "email":
                 regex = "^([A-Za-z0-9]{1})([-_\\.A-Za-z0-9]{0,})([A-Za-z0-9]{1})@([A-Za-z0-9\\.]+)*([A-Za-z]{2,})$";
@@ -187,7 +186,7 @@ public class ControllerDefaultImpl implements ControllerDefault {
                 regex=null;
         }
         if(regex!=null) {
-            Pattern pat = Pattern.compile(regex);
+            pat = Pattern.compile(regex);
             math = pat.matcher(cadena);
             if(!math.find()){
                 throw new InvalidExpressionException(HttpStatus.PRECONDITION_FAILED,"el campo de " +tipo+" no es valido");
