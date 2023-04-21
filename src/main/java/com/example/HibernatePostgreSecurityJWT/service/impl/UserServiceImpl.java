@@ -35,7 +35,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class UserServiceImpl implements UserService {
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-
     private final AuthenticationManager authenticationManager;
 
     private final TokenProvider jwtTokenUtil;
@@ -203,6 +202,12 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+    /**
+     * metodo interno para verificar que los datos a ingresar a la base de datos no este ocupado
+     * si los datos no estan ocupado continua el proceso de la funcion que lo llama, si encuentra
+     * algun dato que este ocupado genera una exepcion y notifica cual esta ocupado
+     * @param user datos de usuario a ser agregado o modificado
+     */
     private void verificactionUsuario(User user){
         //verificar que el username no este ocupado
         if (repositoryPersonalized.existByEmail(user.getEmail())){
