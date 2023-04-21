@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 public class ControllerDefaultImpl implements ControllerDefault {
     Logger logger = LoggerFactory.getLogger(ControllerDefaultImpl.class);
 
-    private String regex = null;
+
     private Pattern pat = null;
     private Matcher math = null;
 
@@ -161,6 +161,7 @@ public class ControllerDefaultImpl implements ControllerDefault {
      * @param tipo el tipo de cadena que corresponde
      */
     protected void validarExprecionRegular(String cadena, String tipo){
+        String regex = null;
         switch (tipo) {
             case "email":
                 regex = "^([A-Za-z0-9]{1})([-_\\.A-Za-z0-9]{0,})([A-Za-z0-9]{1})@([A-Za-z0-9\\.]+)*([A-Za-z]{2,})$";
